@@ -29,28 +29,11 @@ class MetricsTracker:
         y_true = np.array(actuals, dtype=int)
         y_pred = np.array(predictions, dtype=int)
 
-        # Confusion matrix
-        # [[TN, FP],
-        #  [FN, TP]]
-        cm = confusion_matrix(y_true, y_pred)
+        # Confusion matrix - uvek koristi obe labele
+        cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
 
-        # Distribriraj vrednosti (možda nema obe klase u batch-u)
-        if cm.size == 4:
-            tn, fp, fn, tp = cm.ravel()
-        else:
-            # Ako nema prevara ili nema legitimnih u batch-u
-            tn = fp = fn = tp = 0
-            if cm.size == 1:
-                if actuals[0] == 0:  # Samo legitimne
-                    if predictions[0] == 0:
-                        tn = cm[0, 0]
-                    else:
-                        fp = cm[0, 0]
-                else:  # Samo prevare
-                    if predictions[0] == 0:
-                        fn = cm[0, 0]
-                    else:
-                        tp = cm[0, 0]
+        # Distribriraj vrednosti
+        tn, fp, fn, tp = cm.ravel()
 
         # Kalkuliši metrike sa zaštitom od deljenja nulom
         total = tn + fp + fn + tp
@@ -70,10 +53,18 @@ class MetricsTracker:
 
         # ROC-AUC - area under ROC curve
         # Za batch nivo koristimo prosečnu verovatnoću kao proxy
-        avg_fraud_proba = np.mean([p for p, a in zip(probabilities, actuals) if a])
-        avg_legit_proba = np.mean([p for p, a in zip(probabilities, actuals) if not a])
+        fraud_probs = [p for p, a in zip(probabilities, actuals) if a]
+        legit_probs = [p for p, a in zip(probabilities, actuals) if not a]
+
+        # Proveri da li ima podataka za obe klase
+        avg_fraud_proba = np.mean(fraud_probs) if fraud_probs else 0
+        avg_legit_proba = np.mean(legit_probs) if legit_probs else 0
+
         # Approx AUC (nije egzaktan ali dobar indikator)
-        approx_auc = abs(avg_fraud_proba - avg_legit_proba) if (avg_fraud_proba and avg_legit_proba) else 0
+        if fraud_probs and legit_probs:
+            approx_auc = abs(avg_fraud_proba - avg_legit_proba)
+        else:
+            approx_auc = 0
 
         # Kreiraj metric entry
         metrics = {
@@ -174,13 +165,18 @@ class MetricsTracker:
         recent_batches = online_metrics[-n:]
 
         def avg_metric(batches, metric_name):
-            return np.mean([b[metric_name] for b in batches])
+            values = [b[metric_name] for b in batches if metric_name in b]
+            return np.mean(values) if values else 0
 
         # Poredi early vs recent
         trends = {}
         for metric in ['accuracy', 'precision', 'recall', 'f1']:
             early_avg = avg_metric(early_batches, metric)
             recent_avg = avg_metric(recent_batches, metric)
+
+            # Ako nema vrednosti, preskoči
+            if early_avg == 0 and recent_avg == 0:
+                continue
 
             change = recent_avg - early_avg
             change_pct = (change / early_avg * 100) if early_avg > 0 else 0

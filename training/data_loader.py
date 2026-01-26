@@ -21,10 +21,13 @@ class DataLoader:
         if self.sample_fraction < 1.0:
             print(f"\nKoristi se {self.sample_fraction * 100}% podataka (sample)")
 
-            # Stratifikovani sampling - održava proporciju prevara
-            self.data = self.data.groupby('Class', group_keys=False).apply(
-                lambda x: x.sample(frac=self.sample_fraction, random_state=self.random_seed)
-            ).reset_index(drop=True)
+            # Najčišći način - direktno sample po grupama
+            self.data = (
+                self.data
+                .groupby('Class', group_keys=False)
+                .sample(frac=self.sample_fraction, random_state=self.random_seed)
+                .reset_index(drop=True)
+            )
 
             print(f"Nakon samplinga: {len(self.data):,} transakcija")
             print(f"Prevare: {len(self.data[self.data['Class'] == 1]):,}")

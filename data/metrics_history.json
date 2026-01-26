@@ -1,20 +1,20 @@
 {
-  "export_time": "2026-01-25T17:26:31.672295",
+  "export_time": "2026-01-26T13:11:08.337753",
   "total_batches": 36,
   "metrics_history": [
     {
-      "timestamp": "2026-01-25T17:26:12.707726",
+      "timestamp": "2026-01-26T13:10:52.878249",
       "batch": 0,
       "model_type": "initial_rf",
-      "accuracy": 0.9992476489028214,
-      "precision": 0.75,
+      "accuracy": 0.998871473354232,
+      "precision": 0.631578947368421,
       "recall": 0.8571428571428571,
-      "f1": 0.7999999999999999,
-      "auc": 0.9102454824411865,
+      "f1": 0.7272727272727273,
+      "auc": 0.9369111920612989,
       "confusion_matrix": [
         [
-          7957,
-          4
+          7954,
+          7
         ],
         [
           2,
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "timestamp": "2026-01-25T17:26:13.131665",
+      "timestamp": "2026-01-26T13:10:53.306171",
       "batch": 1,
       "model_type": "online_arf",
       "accuracy": 0.996,
@@ -55,7 +55,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:13.583292",
+      "timestamp": "2026-01-26T13:10:53.760257",
       "batch": 2,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -63,10 +63,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -82,7 +87,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:14.033352",
+      "timestamp": "2026-01-26T13:10:54.209601",
       "batch": 3,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -90,10 +95,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -109,7 +119,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:14.493677",
+      "timestamp": "2026-01-26T13:10:54.660595",
       "batch": 4,
       "model_type": "online_arf",
       "accuracy": 0.994,
@@ -141,7 +151,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:14.946799",
+      "timestamp": "2026-01-26T13:10:55.109445",
       "batch": 5,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -173,7 +183,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:15.395134",
+      "timestamp": "2026-01-26T13:10:55.565000",
       "batch": 6,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -181,10 +191,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -200,7 +215,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:15.844085",
+      "timestamp": "2026-01-26T13:10:56.051943",
       "batch": 7,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -208,10 +223,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -227,7 +247,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:16.294187",
+      "timestamp": "2026-01-26T13:10:56.502952",
       "batch": 8,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -235,10 +255,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -254,7 +279,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:16.743582",
+      "timestamp": "2026-01-26T13:10:56.957051",
       "batch": 9,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -262,10 +287,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -281,7 +311,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:17.193317",
+      "timestamp": "2026-01-26T13:10:57.411390",
       "batch": 10,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -313,7 +343,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:17.644104",
+      "timestamp": "2026-01-26T13:10:57.864042",
       "batch": 11,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -321,10 +351,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -340,7 +375,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:18.096310",
+      "timestamp": "2026-01-26T13:10:58.313169",
       "batch": 12,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -372,7 +407,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:18.551105",
+      "timestamp": "2026-01-26T13:10:58.765731",
       "batch": 13,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -380,10 +415,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -399,7 +439,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:19.004143",
+      "timestamp": "2026-01-26T13:10:59.222203",
       "batch": 14,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -407,10 +447,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -426,7 +471,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:19.454387",
+      "timestamp": "2026-01-26T13:10:59.673988",
       "batch": 15,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -458,7 +503,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:19.908208",
+      "timestamp": "2026-01-26T13:11:00.126781",
       "batch": 16,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -466,10 +511,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -485,7 +535,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:20.359164",
+      "timestamp": "2026-01-26T13:11:00.577147",
       "batch": 17,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -493,10 +543,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -512,7 +567,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:20.813498",
+      "timestamp": "2026-01-26T13:11:01.031127",
       "batch": 18,
       "model_type": "online_arf",
       "accuracy": 0.996,
@@ -544,7 +599,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:21.270573",
+      "timestamp": "2026-01-26T13:11:01.482911",
       "batch": 19,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -576,7 +631,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:21.724149",
+      "timestamp": "2026-01-26T13:11:01.929535",
       "batch": 20,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -608,7 +663,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:22.179291",
+      "timestamp": "2026-01-26T13:11:02.381392",
       "batch": 21,
       "model_type": "online_arf",
       "accuracy": 0.994,
@@ -640,7 +695,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:22.633007",
+      "timestamp": "2026-01-26T13:11:02.834997",
       "batch": 22,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -648,10 +703,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -667,7 +727,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:23.089213",
+      "timestamp": "2026-01-26T13:11:03.286639",
       "batch": 23,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -699,7 +759,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:23.543853",
+      "timestamp": "2026-01-26T13:11:03.740153",
       "batch": 24,
       "model_type": "online_arf",
       "accuracy": 0.996,
@@ -731,7 +791,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:23.995233",
+      "timestamp": "2026-01-26T13:11:04.193252",
       "batch": 25,
       "model_type": "online_arf",
       "accuracy": 0.996,
@@ -763,7 +823,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:24.449041",
+      "timestamp": "2026-01-26T13:11:04.646619",
       "batch": 26,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -771,10 +831,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -790,7 +855,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:24.902214",
+      "timestamp": "2026-01-26T13:11:05.099633",
       "batch": 27,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -798,10 +863,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -817,7 +887,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:25.355438",
+      "timestamp": "2026-01-26T13:11:05.550331",
       "batch": 28,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -849,7 +919,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:25.810672",
+      "timestamp": "2026-01-26T13:11:06.003037",
       "batch": 29,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -857,10 +927,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -876,7 +951,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:26.262681",
+      "timestamp": "2026-01-26T13:11:06.450126",
       "batch": 30,
       "model_type": "online_arf",
       "accuracy": 0.994,
@@ -908,7 +983,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:26.717628",
+      "timestamp": "2026-01-26T13:11:06.897679",
       "batch": 31,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -940,7 +1015,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:27.171594",
+      "timestamp": "2026-01-26T13:11:07.346961",
       "batch": 32,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -948,10 +1023,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -967,7 +1047,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:27.625939",
+      "timestamp": "2026-01-26T13:11:07.797905",
       "batch": 33,
       "model_type": "online_arf",
       "accuracy": 0.998,
@@ -999,7 +1079,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:28.080780",
+      "timestamp": "2026-01-26T13:11:08.254443",
       "batch": 34,
       "model_type": "online_arf",
       "accuracy": 1.0,
@@ -1007,10 +1087,15 @@
       "recall": 0.0,
       "f1": 0.0,
       "fpr": 0.0,
-      "auc": NaN,
+      "auc": 0.0,
       "confusion_matrix": [
         [
-          500
+          500,
+          0
+        ],
+        [
+          0,
+          0
         ]
       ],
       "true_negatives": 500,
@@ -1026,7 +1111,7 @@
       "false_alarm_rate": 0.0
     },
     {
-      "timestamp": "2026-01-25T17:26:28.161425",
+      "timestamp": "2026-01-26T13:11:08.337753",
       "batch": 35,
       "model_type": "online_arf",
       "accuracy": 0.9887640449438202,
@@ -1060,7 +1145,7 @@
   ],
   "summary": {
     "current": {
-      "timestamp": "2026-01-25T17:26:28.161425",
+      "timestamp": "2026-01-26T13:11:08.337753",
       "batch": 35,
       "model_type": "online_arf",
       "accuracy": 0.9887640449438202,
@@ -1113,27 +1198,6 @@
       "recent_avg": 0.9955880149812734,
       "change": -0.003078651685393341,
       "change_pct": -0.30827620347730383,
-      "status": "stable"
-    },
-    "precision": {
-      "early_avg": 0.0,
-      "recent_avg": 0.0,
-      "change": 0.0,
-      "change_pct": 0.0,
-      "status": "stable"
-    },
-    "recall": {
-      "early_avg": 0.0,
-      "recent_avg": 0.0,
-      "change": 0.0,
-      "change_pct": 0.0,
-      "status": "stable"
-    },
-    "f1": {
-      "early_avg": 0.0,
-      "recent_avg": 0.0,
-      "change": 0.0,
-      "change_pct": 0.0,
       "status": "stable"
     }
   }
