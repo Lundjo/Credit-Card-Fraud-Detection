@@ -15,8 +15,9 @@ Ovaj modul integriše sve komponente:
 Omogućava:
 1. Inicijalizaciju sistema sa konfiguracijom
 2. Trening inicijalnog modela
-3. Simulaciju streaming transakcija
-4. Real-time evaluaciju i učenje
+3. Warm-start online modela sa znanjem iz RF-a
+4. Simulaciju streaming transakcija
+5. Real-time evaluaciju i učenje
 """
 
 import numpy as np
@@ -29,18 +30,19 @@ from online_model import OnlineModel
 from metrics_tracker import MetricsTracker
 from pathlib import Path
 
+
 class FraudDetectionSystem:
     """
     Centralna klasa za ceo Fraud Detection sistem.
 
     Ova klasa:
     - Koordinira sve komponente
-    - Upravlja workflow-om (init -> train -> stream)
-    - Omogućava različite konfiguracije
+    - Upravlja workflow-om (init -> train -> warm-start -> stream)
+    - Omogućava razlicite konfiguracije
     """
 
     def __init__(self,
-                 data_path=Path(__file__).parent.parent/'data'/'creditcard.csv',
+                 data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv',
                  sample_fraction=1.0,
                  use_balancing=True,
                  config=None):
@@ -173,16 +175,24 @@ class FraudDetectionSystem:
         self.metrics_tracker.add_initial_metrics(results, model_type='initial_rf')
 
         # Sačuvaj model na disk
-        self.initial_model.save(Path(__file__).parent.parent/'data'/'initial_rf_model.pkl')
+        self.initial_model.save(Path(__file__).parent.parent / 'data' / 'initial_rf_model.pkl')
 
         self.is_trained = True
         print("\n✓ Inicijalni model uspešno istreniran!")
 
         return results
 
-    def initialize_online_model(self):
+    def initialize_online_model(self, warmup_samples=2000):
         """
         Inicijalizuje online learning model (Adaptive Random Forest).
+
+        WARM-START PRISTUP:
+        ARF počinje učenje na inicijalnim podacima pre streaming-a.
+        Ovo omogućava modelu da brže nauči distribuciju i smanji
+        cold-start problem.
+
+        Args:
+            warmup_samples (int): Broj primera za warm-up (0 = bez warm-up)
 
         Returns:
             OnlineModel: Inicijalizovani online model
@@ -191,12 +201,62 @@ class FraudDetectionSystem:
             print("⚠️  Inicijalni model nije treniran, ali nastavljamo sa online modelom...")
 
         print("\n" + "=" * 70)
-        print("  KORAK 3: INICIJALIZACIJA ONLINE MODELA")
+        print("  KORAK 3: INICIJALIZACIJA ONLINE MODELA (Warm-Start)")
         print("=" * 70)
 
+        # Inicijalizuj prazan ARF model
         self.online_model.initialize()
 
-        print("✓ Online model spreman za streaming!")
+        # 🔥 WARM-UP FAZA: ARF uči na inicijalnim podacima
+        if warmup_samples > 0 and self.initial_data is not None:
+            print(f"\n{'=' * 70}")
+            print(f"🔥 WARM-UP FAZA: ARF uči od RF modela")
+            print(f"{'=' * 70}")
+            print(f"Broj primera za warm-up: {warmup_samples}")
+
+            # Uzmi stratified sample iz inicijalnih podataka
+            # Ovo osigurava da imamo proporciju prevara kao u originalnom setu
+            warmup_data = self.initial_data.groupby('Class', group_keys=False).apply(
+                lambda x: x.sample(
+                    n=min(len(x), warmup_samples // 2) if len(x) < warmup_samples else warmup_samples * len(x) // len(
+                        self.initial_data),
+                    random_state=self.config.RANDOM_SEED
+                )
+            ).reset_index(drop=True)
+
+            # Pripremi feature-e
+            feature_cols = [col for col in warmup_data.columns
+                            if col not in ['Class', 'Time']]
+
+            fraud_count = 0
+            legit_count = 0
+
+            print(f"\nUčenje u toku...")
+            for idx, row in warmup_data.iterrows():
+                x_dict = {col: float(row[col]) for col in feature_cols}
+                y_true = bool(row['Class'])
+
+                # ARF uči na ovom primeru (bez evaluacije - samo učenje)
+                self.online_model.model.learn_one(x_dict, y_true)
+
+                if y_true:
+                    fraud_count += 1
+                else:
+                    legit_count += 1
+
+                # Progress bar
+                if (idx + 1) % 500 == 0:
+                    print(f"  Procesovano: {idx + 1}/{len(warmup_data)} primera", end='\r')
+
+            print(f"\n\n✓ Warm-up uspešno završen!")
+            print(f"  Ukupno naučeno: {len(warmup_data):,} primera")
+            print(f"  - Legitimne transakcije: {legit_count:,}")
+            print(f"  - Prevare: {fraud_count:,}")
+            print(f"\n💡 ARF model sada ima bazno znanje iz RF modela!")
+        else:
+            print("\n⚠️  Warm-up preskoćen (warmup_samples=0)")
+
+        print("\n✓ Online model spreman za streaming!")
         return self.online_model
 
     def simulate_streaming(self, batch_size=None, delay=0, verbose=True):
@@ -206,9 +266,9 @@ class FraudDetectionSystem:
         Ova metoda:
         1. Procesira streaming podatke batch-by-batch
         2. Za svaku transakciju:
-           - Predvidi sa online modelom
+           - Predvidi sa ARF modelom (koji je već naučio od RF-a)
            - Evaluira predikciju
-           - Uči na toj transakciji (online learning)
+           - Uči na toj transakciji (inkremantalno)
         3. Prati metrike po batch-evima
         4. Čuva prevare u buffer
 
@@ -259,7 +319,7 @@ class FraudDetectionSystem:
                 x_dict = {col: float(row[col]) for col in feature_cols}
                 y_true = bool(row['Class'])
 
-                # 1. PREDIKCIJA sa online modelom
+                # 1. PREDIKCIJA sa ARF modelom (koji je već warm-up-ovan)
                 y_pred = self.online_model.predict_one(x_dict)
                 y_pred_proba_dict = self.online_model.predict_proba_one(x_dict)
                 y_pred_proba = y_pred_proba_dict.get(True, 0)
@@ -270,7 +330,7 @@ class FraudDetectionSystem:
                 batch_probabilities.append(y_pred_proba)
 
                 # 2. ONLINE UČENJE
-                # Model uči na ovoj transakciji (incrementalno)
+                # Model nastavlja da uči na ovoj transakciji (incrementalno)
                 self.online_model.learn_one(x_dict, y_true)
 
                 # 3. AKO JE PREVARA - dodaj u buffer
@@ -365,27 +425,30 @@ class FraudDetectionSystem:
     def run_complete_pipeline(self,
                               batch_size=None,
                               streaming_delay=0,
-                              save_results=True):
+                              save_results=True,
+                              warmup_samples=2000):
         """
         Pokreće kompletan workflow od početka do kraja.
 
         Ova metoda izvršava sve korake:
         1. Učitavanje podataka
-        2. Trening inicijalnog modela
-        3. Inicijalizacija online modela
-        4. Streaming simulacija
+        2. Trening inicijalnog RF modela
+        3. Warm-start ARF modela sa znanjem iz RF-a
+        4. Streaming simulacija (ARF nastavlja da uči)
         5. (Opciono) Čuvanje rezultata
 
         Args:
             batch_size (int): Veličina batch-a za streaming
             streaming_delay (float): Pauza između batch-eva
             save_results (bool): Da li sačuvati rezultate
+            warmup_samples (int): Broj primera za ARF warm-up (preporuka: 2000-5000)
 
         Returns:
             dict: Kompletan izveštaj sa svim rezultatima
         """
         print("\n" + "🚀" * 35)
         print("  POKRETANJE KOMPLETNOG FRAUD DETECTION PIPELINE-A")
+        print("  (RF → ARF Warm-Start → Streaming)")
         print("🚀" * 35 + "\n")
 
         start_time = time.time()
@@ -397,10 +460,10 @@ class FraudDetectionSystem:
             # KORAK 2: Treniraj inicijalni RF model
             initial_results = self.train_initial_model()
 
-            # KORAK 3: Inicijalizuj online ARF model
-            self.initialize_online_model()
+            # KORAK 3: Warm-start ARF sa znanjem iz RF
+            self.initialize_online_model(warmup_samples=warmup_samples)
 
-            # KORAK 4: Simuliraj streaming
+            # KORAK 4: Simuliraj streaming (ARF nastavlja da uči)
             streaming_results = self.simulate_streaming(
                 batch_size=batch_size,
                 delay=streaming_delay,
@@ -409,7 +472,7 @@ class FraudDetectionSystem:
 
             # KORAK 5: Sačuvaj rezultate
             if save_results:
-                self.save_all(Path(__file__).parent.parent/'data'/'metrics_history.json')
+                self.save_all(Path(__file__).parent.parent / 'data' / 'metrics_history.json')
 
             end_time = time.time()
             elapsed = end_time - start_time
@@ -418,6 +481,11 @@ class FraudDetectionSystem:
             report = {
                 'success': True,
                 'elapsed_time_seconds': elapsed,
+                'configuration': {
+                    'warmup_samples': warmup_samples,
+                    'batch_size': batch_size or self.config.DEFAULT_BATCH_SIZE,
+                    'use_balancing': self.config.USE_BALANCING
+                },
                 'initial_model_results': initial_results,
                 'streaming_summary': self.metrics_tracker.get_metrics_summary(),
                 'trend_analysis': self.metrics_tracker.get_trend_analysis(),
@@ -442,10 +510,12 @@ if __name__ == '__main__':
     """
     Ovaj blok se izvršava kada direktno pokreneš ovaj fajl.
     Korisno za testiranje bez Flask API-ja.
+
+    NAPOMENA: Sada ARF koristi warm-start - uči od RF modela pre streaming-a!
     """
 
     print("\n" + "=" * 70)
-    print("  STANDALONE REŽIM - Testiranje sistema")
+    print("  STANDALONE REŽIM - Testiranje sistema sa Warm-Start")
     print("=" * 70 + "\n")
 
     # Kreiraj custom config ako želiš (ili koristi default)
@@ -456,26 +526,29 @@ if __name__ == '__main__':
 
     # Kreiraj sistem
     system = FraudDetectionSystem(
-        data_path=Path(__file__).parent.parent/'data'/'creditcard.csv',
+        data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv',
         sample_fraction=custom_config.SAMPLE_FRACTION,
         use_balancing=custom_config.USE_BALANCING,
         config=custom_config
     )
 
-    # Pokreni kompletan pipeline
+    # Pokreni kompletan pipeline SA WARM-START
     report = system.run_complete_pipeline(
         batch_size=500,
         streaming_delay=0,  # Bez pauze za brže izvršavanje
-        save_results=True
+        save_results=True,
+        warmup_samples=2000  # ✅ ARF će prvo naučiti 2000 primera iz RF-a
     )
 
     print("\n" + "=" * 70)
     print("  FINALNI IZVEŠTAJ")
     print("=" * 70)
     print(f"\nVreme izvršavanja: {report['elapsed_time_seconds']:.2f}s")
-    print(f"Inicijalni F1-Score: {report['initial_model_results']['f1'] * 100:.2f}%")
+    print(f"Inicijalni RF F1-Score: {report['initial_model_results']['f1'] * 100:.2f}%")
 
     if report['streaming_summary']:
         totals = report['streaming_summary']['totals']
         print(f"\nUkupno detektovano prevara: {totals['frauds_detected']}/{totals['frauds_encountered']}")
         print(f"Overall Detection Rate: {totals['overall_detection_rate'] * 100:.2f}%")
+
+        print(f"\n💡 ARF je počeo sa {report['configuration']['warmup_samples']} primera znanja iz RF-a!")
