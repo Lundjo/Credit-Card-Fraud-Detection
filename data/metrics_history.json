@@ -1,0 +1,1140 @@
+{
+  "export_time": "2026-01-25T17:26:31.672295",
+  "total_batches": 36,
+  "metrics_history": [
+    {
+      "timestamp": "2026-01-25T17:26:12.707726",
+      "batch": 0,
+      "model_type": "initial_rf",
+      "accuracy": 0.9992476489028214,
+      "precision": 0.75,
+      "recall": 0.8571428571428571,
+      "f1": 0.7999999999999999,
+      "auc": 0.9102454824411865,
+      "confusion_matrix": [
+        [
+          7957,
+          4
+        ],
+        [
+          2,
+          12
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-01-25T17:26:13.131665",
+      "batch": 1,
+      "model_type": "online_arf",
+      "accuracy": 0.996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 0.0011686160347231256,
+      "confusion_matrix": [
+        [
+          498,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "true_negatives": 498,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 2,
+      "detected_frauds": 0,
+      "missed_frauds": 2,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:13.583292",
+      "batch": 2,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:14.033352",
+      "batch": 3,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:14.493677",
+      "batch": 4,
+      "model_type": "online_arf",
+      "accuracy": 0.994,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 0.0006333880498268782,
+      "confusion_matrix": [
+        [
+          497,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "true_negatives": 497,
+      "false_positives": 0,
+      "false_negatives": 3,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 3,
+      "detected_frauds": 0,
+      "missed_frauds": 3,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:14.946799",
+      "batch": 5,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 0.00017106665468448468,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:15.395134",
+      "batch": 6,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:15.844085",
+      "batch": 7,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:16.294187",
+      "batch": 8,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:16.743582",
+      "batch": 9,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:17.193317",
+      "batch": 10,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 0.00014323754508428657,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:17.644104",
+      "batch": 11,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:18.096310",
+      "batch": 12,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 6.111466208150044e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:18.551105",
+      "batch": 13,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:19.004143",
+      "batch": 14,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:19.454387",
+      "batch": 15,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 7.935860611934446e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:19.908208",
+      "batch": 16,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:20.359164",
+      "batch": 17,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:20.813498",
+      "batch": 18,
+      "model_type": "online_arf",
+      "accuracy": 0.996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 7.659941718650095e-05,
+      "confusion_matrix": [
+        [
+          498,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "true_negatives": 498,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 2,
+      "detected_frauds": 0,
+      "missed_frauds": 2,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:21.270573",
+      "batch": 19,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 3.978788144395765e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:21.724149",
+      "batch": 20,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 5.598572940902725e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:22.179291",
+      "batch": 21,
+      "model_type": "online_arf",
+      "accuracy": 0.994,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 6.409656935234265e-05,
+      "confusion_matrix": [
+        [
+          497,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "true_negatives": 497,
+      "false_positives": 0,
+      "false_negatives": 3,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 3,
+      "detected_frauds": 0,
+      "missed_frauds": 3,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:22.633007",
+      "batch": 22,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:23.089213",
+      "batch": 23,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 4.7127787765829455e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:23.543853",
+      "batch": 24,
+      "model_type": "online_arf",
+      "accuracy": 0.996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 4.1399501965927715e-05,
+      "confusion_matrix": [
+        [
+          498,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "true_negatives": 498,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 2,
+      "detected_frauds": 0,
+      "missed_frauds": 2,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:23.995233",
+      "batch": 25,
+      "model_type": "online_arf",
+      "accuracy": 0.996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 1.1532960963664407e-07,
+      "confusion_matrix": [
+        [
+          498,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "true_negatives": 498,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 2,
+      "detected_frauds": 0,
+      "missed_frauds": 2,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:24.449041",
+      "batch": 26,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:24.902214",
+      "batch": 27,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:25.355438",
+      "batch": 28,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 3.11283524551181e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:25.810672",
+      "batch": 29,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:26.262681",
+      "batch": 30,
+      "model_type": "online_arf",
+      "accuracy": 0.994,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 4.527314973376854e-06,
+      "confusion_matrix": [
+        [
+          497,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "true_negatives": 497,
+      "false_positives": 0,
+      "false_negatives": 3,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 3,
+      "detected_frauds": 0,
+      "missed_frauds": 3,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:26.717628",
+      "batch": 31,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 3.959088450221663e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:27.171594",
+      "batch": 32,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:27.625939",
+      "batch": 33,
+      "model_type": "online_arf",
+      "accuracy": 0.998,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 2.7307638281792073e-05,
+      "confusion_matrix": [
+        [
+          499,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 499,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:28.080780",
+      "batch": 34,
+      "model_type": "online_arf",
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": NaN,
+      "confusion_matrix": [
+        [
+          500
+        ]
+      ],
+      "true_negatives": 500,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "true_positives": 0,
+      "total_transactions": 500,
+      "fraud_count": 0,
+      "detected_frauds": 0,
+      "missed_frauds": 0,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    {
+      "timestamp": "2026-01-25T17:26:28.161425",
+      "batch": 35,
+      "model_type": "online_arf",
+      "accuracy": 0.9887640449438202,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 2.7226982379759557e-05,
+      "confusion_matrix": [
+        [
+          88,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 88,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 89,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    }
+  ],
+  "summary": {
+    "current": {
+      "timestamp": "2026-01-25T17:26:28.161425",
+      "batch": 35,
+      "model_type": "online_arf",
+      "accuracy": 0.9887640449438202,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "auc": 2.7226982379759557e-05,
+      "confusion_matrix": [
+        [
+          88,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "true_negatives": 88,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "true_positives": 0,
+      "total_transactions": 89,
+      "fraud_count": 1,
+      "detected_frauds": 0,
+      "missed_frauds": 1,
+      "false_alarms": 0,
+      "detection_rate": 0.0,
+      "false_alarm_rate": 0.0
+    },
+    "averages": {
+      "avg_accuracy": 0.9981361155698234,
+      "avg_precision": 0.0,
+      "avg_recall": 0.0,
+      "avg_f1": 0.0,
+      "avg_fpr": 0.0
+    },
+    "totals": {
+      "transactions_processed": 17089,
+      "frauds_encountered": 28,
+      "frauds_detected": 0,
+      "frauds_missed": 28,
+      "overall_detection_rate": 0.0
+    },
+    "total_batches": 35
+  },
+  "trends": {
+    "accuracy": {
+      "early_avg": 0.9986666666666667,
+      "recent_avg": 0.9955880149812734,
+      "change": -0.003078651685393341,
+      "change_pct": -0.30827620347730383,
+      "status": "stable"
+    },
+    "precision": {
+      "early_avg": 0.0,
+      "recent_avg": 0.0,
+      "change": 0.0,
+      "change_pct": 0.0,
+      "status": "stable"
+    },
+    "recall": {
+      "early_avg": 0.0,
+      "recent_avg": 0.0,
+      "change": 0.0,
+      "change_pct": 0.0,
+      "status": "stable"
+    },
+    "f1": {
+      "early_avg": 0.0,
+      "recent_avg": 0.0,
+      "change": 0.0,
+      "change_pct": 0.0,
+      "status": "stable"
+    }
+  }
+}
