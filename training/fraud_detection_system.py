@@ -1,26 +1,3 @@
-# ============================================================================
-# FILE: fraud_detection_system.py
-# Glavna klasa koja integriše sve komponente sistema
-# ============================================================================
-
-"""
-Fraud Detection System - Glavna klasa
-
-Ovaj modul integriše sve komponente:
-- DataLoader: učitavanje i priprema podataka
-- InitialModel: Random Forest za inicijalni trening
-- OnlineModel: Adaptive Random Forest za streaming
-- MetricsTracker: praćenje performansi
-
-Omogućava:
-1. Inicijalizaciju sistema sa konfiguracijom
-2. Trening inicijalnog modela
-3. Warm-start online modela sa znanjem iz RF-a
-4. Simulaciju streaming transakcija
-5. Real-time evaluaciju i učenje
-"""
-
-import numpy as np
 import time
 from sklearn.model_selection import train_test_split
 from config import Config
@@ -32,15 +9,6 @@ from pathlib import Path
 
 
 class FraudDetectionSystem:
-    """
-    Centralna klasa za ceo Fraud Detection sistem.
-
-    Ova klasa:
-    - Koordinira sve komponente
-    - Upravlja workflow-om (init -> train -> warm-start -> stream)
-    - Omogućava razlicite konfiguracije
-    """
-
     def __init__(self,
                  data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv',
                  sample_fraction=1.0,

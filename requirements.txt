@@ -4,3 +4,4 @@ scikit-learn
 imblearn
 river
 typing-extensions
+flask_cors
