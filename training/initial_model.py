@@ -18,7 +18,7 @@ class InitialModel:
         print("TRENIRANJE INICIJALNOG RANDOM FOREST MODELA")
         print("=" * 60)
 
-        # Sačuvaj nazive feature-a
+        # cuvanje feature names
         self.feature_names = X_train.columns.tolist()
 
         # Prikaži distribuciju klasa pre balansiranja
@@ -28,26 +28,23 @@ class InitialModel:
         print(f"  Legitimne transakcije: {total_count - fraud_count:,} ({(1 - fraud_count / total_count) * 100:.2f}%)")
         print(f"  Prevare: {fraud_count:,} ({fraud_count / total_count * 100:.2f}%)")
 
-        # BALANSIRANJE PODATAKA (ako je uključeno)
         if self.use_balancing:
             print(f"\n{'=' * 60}")
             print("BALANSIRANJE PODATAKA (SMOTE + Undersampling)")
             print("=" * 60)
 
-            # SMOTE - Synthetic Minority Over-sampling Technique
-            # Kreira sintetičke primere prevara baziranih na existing features
+            # kreiranje laznih prevara
             over = SMOTE(
                 sampling_strategy=self.config.SMOTE_SAMPLING_STRATEGY,
                 random_state=self.config.RANDOM_SEED
             )
 
-            # Random Undersampling - uklanja višak legitimnih transakcija
+            # brisanje pravih transakcija
             under = RandomUnderSampler(
                 sampling_strategy=self.config.UNDERSAMPLING_STRATEGY,
                 random_state=self.config.RANDOM_SEED
             )
 
-            # Pipeline koji primenjuje obe tehnike
             pipeline = ImbPipeline(steps=[('over', over), ('under', under)])
             X_train_resampled, y_train_resampled = pipeline.fit_resample(X_train, y_train)
 
@@ -82,18 +79,15 @@ class InitialModel:
             class_weight=self.config.RF_CLASS_WEIGHT,
             random_state=self.config.RANDOM_SEED,
             n_jobs=self.config.RF_N_JOBS,
-            verbose=1  # Prikaži progress
+            verbose=1  # progress
         )
 
-        # Treniraj model
         self.model.fit(X_train_final, y_train_final)
 
-        # EVALUACIJA NA VALIDATION SETU
         print(f"\n{'=' * 60}")
         print("EVALUACIJA NA VALIDATION SETU")
         print("=" * 60)
 
-        # Predikcije
         y_pred = self.model.predict(X_val)
         y_pred_proba = self.model.predict_proba(X_val)[:, 1]
 
@@ -140,25 +134,21 @@ class InitialModel:
         }
 
     def predict(self, X):
-        """Predikcija na novim podacima."""
         if self.model is None:
             raise ValueError("Model nije istreniran!")
         return self.model.predict(X)
 
     def predict_proba(self, X):
-        """Verovatnoće predikcija."""
         if self.model is None:
             raise ValueError("Model nije istreniran!")
         return self.model.predict_proba(X)
 
     def save(self, filepath='initial_rf_model.pkl'):
-        """Sačuvaj model na disk."""
         if self.model is None:
             raise ValueError("Model nije istreniran!")
         joblib.dump(self.model, filepath)
         print(f"\n✓ Model sačuvan: {filepath}")
 
     def load(self, filepath='initial_rf_model.pkl'):
-        """Učitaj model sa diska."""
         self.model = joblib.load(filepath)
         print(f"✓ Model učitan: {filepath}")

@@ -10,30 +10,28 @@ class DataLoader:
     def load_data(self):
         print(f"Učitavam podatke iz: {self.data_path}")
 
-        # Učitaj ceo dataset
         self.data = pd.read_csv(self.data_path)
 
         print(f"Ukupno transakcija: {len(self.data):,}")
         print(
             f"Prevare: {len(self.data[self.data['Class'] == 1]):,} ({len(self.data[self.data['Class'] == 1]) / len(self.data) * 100:.2f}%)")
 
-        # Ako koristimo samo deo podataka (za brže testiranje)
         if self.sample_fraction < 1.0:
             print(f"\nKoristi se {self.sample_fraction * 100}% podataka (sample)")
 
-            # Najčišći način - direktno sample po grupama
+            # da bi se osiguralo da ostaje isti odnos uzima se isti procenat od obe klase
             self.data = (
                 self.data
-                .groupby('Class', group_keys=False)
+                .groupby('Class', group_keys=False) # false da bi svi u klasi imali isti index, lakse za obradu
                 .sample(frac=self.sample_fraction, random_state=self.random_seed)
-                .reset_index(drop=True)
+                .reset_index(drop=True) # resetuje indexe zbog brze obrade
             )
 
             print(f"Nakon samplinga: {len(self.data):,} transakcija")
             print(f"Prevare: {len(self.data[self.data['Class'] == 1]):,}")
 
-        # Shuffle podataka
-        self.data = self.data.sample(frac=1, random_state=self.random_seed).reset_index(drop=True)
+            # shuffle podataka
+            self.data = self.data.sample(frac=1, random_state=self.random_seed).reset_index(drop=True)
 
         return self.data
 
@@ -41,10 +39,9 @@ class DataLoader:
         if self.data is None:
             raise ValueError("Podaci nisu učitani! Pozovi prvo load_data()")
 
-        # Izračunaj indeks za split
         split_idx = int(len(self.data) * initial_split)
 
-        # Podeli podatke
+        # podela podataka offline i online
         initial_data = self.data.iloc[:split_idx].copy()
         streaming_data = self.data.iloc[split_idx:].copy()
 

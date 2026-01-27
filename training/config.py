@@ -9,22 +9,22 @@ class Config:
     # smanjivanje legitimnih transakcija
     UNDERSAMPLING_STRATEGY = 0.7  # 70% od novih laznih transakcija
 
-    # Inicijalni model
-    RF_N_ESTIMATORS = 100  # Broj stabala u šumi
-    RF_MAX_DEPTH = 20  # Maksimalna dubina stabala
-    RF_MIN_SAMPLES_SPLIT = 10  # Min. uzoraka za split node-a
-    RF_MIN_SAMPLES_LEAF = 4  # Min. uzoraka u leaf node-u
+    # inicijalni model
+    RF_N_ESTIMATORS = 100  # broj stabala
+    RF_MAX_DEPTH = 20  # maksimalna dubina stabala
+    RF_MIN_SAMPLES_SPLIT = 10  # minimalno uzoraka za deljenje cvora
+    RF_MIN_SAMPLES_LEAF = 4  # minimalno uzoraka u listu
     RF_CLASS_WEIGHT = 'balanced'  # tezinski faktor
-    RF_N_JOBS = -1  # Koristi sve CPU core-ove
+    RF_N_JOBS = -1  # sva procesorska jezgra
 
     # online model
-    ARF_N_MODELS = 10  # Broj stabala u online šumi
-    ARF_MAX_FEATURES = 'sqrt'  # Broj feature-a po stablu
+    ARF_N_MODELS = 10  # broj stabala
+    ARF_MAX_FEATURES = 'sqrt'  # broj karakteristika
     ARF_LAMBDA = 6  # zamena stabala novim
 
     # streaming
-    DEFAULT_BATCH_SIZE = 500  # Koliko transakcija procesirati odjednom
-    FRAUD_BUFFER_SIZE = 100  # Čuvaj poslednjih N prevara
+    DEFAULT_BATCH_SIZE = 500
+    FRAUD_BUFFER_SIZE = 100
 
     # SEED za reproduktivnost
     RANDOM_SEED = 42
