@@ -6,100 +6,86 @@ from sklearn.metrics import confusion_matrix
 
 class MetricsTracker:
     def __init__(self, fraud_buffer_size=100):
-        self.metrics_history = []  # Lista svih metrika po batch-evima
-        self.current_batch = 0  # Broj trenutnog batch-a
+        self.metrics_history = []  # lista svih metrika po batchevima
+        self.current_batch = 0  # broj trenutnog batcha
 
-        # Buffer za prevare - čuva skorašnje prevare da bi model "pamtio"
-        # retke prevare duže nego česte legitimne transakcije
-        self.fraud_buffer = deque(maxlen=fraud_buffer_size)
+        # cuva skorašnje prevare da bi model pamtio
+        self.fraud_buffer = deque(maxlen=fraud_buffer_size) # da li koristiti nesto drugo?
 
+    # rezultati obicnog rf
     def add_initial_metrics(self, metrics, model_type='initial_rf'):
         metric_entry = {
-            'timestamp': datetime.now().isoformat(),
-            'batch': 0,  # Inicijalni model je batch 0
+            'timestamp': datetime.now().isoformat(), # kada je sacuvano
+            'batch': 0,  # inicijalni model je batch 0
             'model_type': model_type,
-            **metrics  # Dodaj sve metrike iz dict-a
+            **metrics  # dodaje sve metrike u ovu novu
         }
 
         self.metrics_history.append(metric_entry)
         print(f"\n✓ Inicijalne metrike sačuvane")
 
     def calculate_batch_metrics(self, predictions, actuals, probabilities, batch_num):
-        # Konvertuj u numpy arrays
+        # pretvara se u niz zbog brzine
         y_true = np.array(actuals, dtype=int)
         y_pred = np.array(predictions, dtype=int)
 
-        # Confusion matrix - uvek koristi obe labele
         cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
-
-        # Distribriraj vrednosti
         tn, fp, fn, tp = cm.ravel()
 
-        # Kalkuliši metrike sa zaštitom od deljenja nulom
         total = tn + fp + fn + tp
+
+        # koliko ima tacnih predvidjanja
         accuracy = (tn + tp) / total if total > 0 else 0
 
-        # Precision - od svih predikovanih prevara, koliko je stvarno prevara?
+        # od svih predikovanih prevara koliko je stvarno prevara
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0
 
-        # Recall (Sensitivity) - od svih stvarnih prevara, koliko smo detektovali?
+        # od svih stvarnih prevara koliko je detektovano
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0
 
-        # F1 Score - harmonijska sredina precision i recall
+        # harmonijska sredina precision i recall koja detektuje da li je neki od njih ekstremno losiji
         f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
-        # False Positive Rate - koliko legitimnih smo pogrešno označili kao prevare?
+        # false positive rate
         fpr = fp / (fp + tn) if (fp + tn) > 0 else 0
 
-        # ROC-AUC - area under ROC curve
-        # Za batch nivo koristimo prosečnu verovatnoću kao proxy
-        fraud_probs = [p for p, a in zip(probabilities, actuals) if a]
-        legit_probs = [p for p, a in zip(probabilities, actuals) if not a]
+        # roc kriva za odredjivanje kvaliteta modela
+        fraud_probs = [p for p, a in zip(probabilities, actuals) if a] # ako je prevara sacuvaj verovatnocu
+        legit_probs = [p for p, a in zip(probabilities, actuals) if not a] # verovatnoca za legitimnu
 
-        # Proveri da li ima podataka za obe klase
+        # prosek treba biti sto veci za fraud, a sto manji za legit
         avg_fraud_proba = np.mean(fraud_probs) if fraud_probs else 0
         avg_legit_proba = np.mean(legit_probs) if legit_probs else 0
 
-        # Approx AUC (nije egzaktan ali dobar indikator)
         if fraud_probs and legit_probs:
             approx_auc = abs(avg_fraud_proba - avg_legit_proba)
         else:
             approx_auc = 0
 
-        # Kreiraj metric entry
         metrics = {
             'timestamp': datetime.now().isoformat(),
             'batch': batch_num,
             'model_type': 'online_arf',
-
-            # Osnovne metrike
             'accuracy': float(accuracy),
             'precision': float(precision),
             'recall': float(recall),
             'f1': float(f1),
             'fpr': float(fpr),
             'auc': float(approx_auc),
-
-            # Confusion matrix
             'confusion_matrix': cm.tolist(),
             'true_negatives': int(tn),
             'false_positives': int(fp),
             'false_negatives': int(fn),
             'true_positives': int(tp),
-
-            # Dodatne informacije
             'total_transactions': int(len(actuals)),
             'fraud_count': int(sum(actuals)),
             'detected_frauds': int(tp),
             'missed_frauds': int(fn),
             'false_alarms': int(fp),
-
-            # Detection rate
-            'detection_rate': float(recall),  # Isti kao recall
+            'detection_rate': float(recall),
             'false_alarm_rate': float(fpr)
         }
 
-        # Dodaj u istoriju
         self.metrics_history.append(metrics)
 
         return metrics
@@ -111,16 +97,16 @@ class MetricsTracker:
         })
 
     def get_recent_frauds(self, n=10):
-        return list(self.fraud_buffer)[-n:] if len(self.fraud_buffer) >= n else list(self.fraud_buffer)
+        return list(self.fraud_buffer)[-n:]
 
     def get_metrics_summary(self):
         if not self.metrics_history:
             return None
 
-        # Poslednje metrike (trenutno stanje)
+        # poslednje metrike
         latest = self.metrics_history[-1]
 
-        # Prosečne metrike preko svih batch-eva (osim inicijalnog)
+        # prosecne metrike za online
         online_metrics = [m for m in self.metrics_history if m['model_type'] == 'online_arf']
 
         if online_metrics:
@@ -134,7 +120,6 @@ class MetricsTracker:
         else:
             avg_metrics = {}
 
-        # Ukupne statistike
         total_transactions = sum([m.get('total_transactions', 0) for m in online_metrics])
         total_frauds = sum([m.get('fraud_count', 0) for m in online_metrics])
         total_detected = sum([m.get('detected_frauds', 0) for m in online_metrics])
@@ -153,47 +138,72 @@ class MetricsTracker:
             'total_batches': len(online_metrics)
         }
 
+    # da li je uopste potrebno ili bar ovoliko detaljno
     def get_trend_analysis(self):
-        online_metrics = [m for m in self.metrics_history if m['model_type'] == 'online_arf']
+        online_metrics = [m for m in self.metrics_history
+                          if m['model_type'] == 'online_arf']
 
-        if len(online_metrics) < 2:
-            return {'status': 'insufficient_data'}
+        if len(online_metrics) < 20:  # minimum za smislenu analizu
+            return {'status': 'insufficient_data',
+                    'message': f'Potrebno min 20 batch-eva, ima {len(online_metrics)}'}
 
-        # Uzmi prve 10% i poslednjih 10% batch-eva
-        n = max(1, len(online_metrics) // 10)
-        early_batches = online_metrics[:n]
-        recent_batches = online_metrics[-n:]
+        # rolling window
+        window_size = max(5, len(online_metrics) // 10)
 
-        def avg_metric(batches, metric_name):
-            values = [b[metric_name] for b in batches if metric_name in b]
-            return np.mean(values) if values else 0
-
-        # Poredi early vs recent
         trends = {}
-        for metric in ['accuracy', 'precision', 'recall', 'f1']:
-            early_avg = avg_metric(early_batches, metric)
-            recent_avg = avg_metric(recent_batches, metric)
 
-            # Ako nema vrednosti, preskoči
-            if early_avg == 0 and recent_avg == 0:
+        for metric in ['accuracy', 'precision', 'recall', 'f1']:
+            values = []
+            for batch in online_metrics:
+                if metric in batch:
+                    values.append(batch[metric])
+
+            if len(values) < window_size * 2:
                 continue
+
+            # rolling average na pocetku
+            early_values = values[:window_size]
+            early_avg = sum(early_values) / len(early_values)
+
+            # rolling average na kraju
+            recent_values = values[-window_size:]
+            recent_avg = sum(recent_values) / len(recent_values)
 
             change = recent_avg - early_avg
             change_pct = (change / early_avg * 100) if early_avg > 0 else 0
 
-            if abs(change_pct) < 1:
+            overall_avg = sum(values) / len(values)
+
+            # standardna devijacija
+            if len(values) > 1:
+                variance = sum((x - overall_avg) ** 2 for x in values) / (len(values) - 1)
+                std_dev = variance ** 0.5
+            else:
+                std_dev = 0
+
+            if abs(change_pct) < 2:
                 status = 'stable'
+            elif change_pct > 5:
+                status = 'improving_strongly'
             elif change_pct > 0:
                 status = 'improving'
+            elif change_pct < -5:
+                status = 'declining_strongly'
             else:
                 status = 'declining'
 
             trends[metric] = {
-                'early_avg': float(early_avg),
-                'recent_avg': float(recent_avg),
-                'change': float(change),
-                'change_pct': float(change_pct),
-                'status': status
+                'early_window_avg': early_avg,
+                'recent_window_avg': recent_avg,
+                'overall_avg': overall_avg,
+                'change': change,
+                'change_percent': change_pct,
+                'volatility': std_dev / overall_avg * 100 if overall_avg > 0 else 0,
+                'status': status,
+                'samples': {
+                    'total': len(values),
+                    'window_size': window_size
+                }
             }
 
         return trends

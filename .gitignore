@@ -181,3 +181,4 @@ cython_debug/
 .cursorindexingignore
 *.csv
 data/creditcard.csv
+data/metrics_history.json
