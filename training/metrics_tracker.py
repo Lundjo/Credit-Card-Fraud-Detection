@@ -9,9 +9,6 @@ class MetricsTracker:
         self.metrics_history = []  # lista svih metrika po batchevima
         self.current_batch = 0  # broj trenutnog batcha
 
-        # cuva skorašnje prevare da bi model pamtio
-        self.fraud_buffer = deque(maxlen=fraud_buffer_size) # da li koristiti nesto drugo?
-
     # rezultati obicnog rf
     def add_initial_metrics(self, metrics, model_type='initial_rf'):
         metric_entry = {
@@ -89,15 +86,6 @@ class MetricsTracker:
         self.metrics_history.append(metrics)
 
         return metrics
-
-    def add_fraud_to_buffer(self, fraud_features):
-        self.fraud_buffer.append({
-            'timestamp': datetime.now().isoformat(),
-            'features': fraud_features
-        })
-
-    def get_recent_frauds(self, n=10):
-        return list(self.fraud_buffer)[-n:]
 
     def get_metrics_summary(self):
         if not self.metrics_history:

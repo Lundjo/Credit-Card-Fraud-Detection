@@ -24,7 +24,7 @@ class FraudDetectionSystem:
         self.data_loader = DataLoader(data_path=self.data_path, sample_fraction=self.config.SAMPLE_FRACTION, random_seed=self.config.RANDOM_SEED)
         self.initial_model = InitialModel(use_balancing=self.config.USE_BALANCING, config=self.config)
         self.online_model = OnlineModel(config=self.config)
-        self.metrics_tracker = MetricsTracker(fraud_buffer_size=self.config.FRAUD_BUFFER_SIZE)
+        self.metrics_tracker = MetricsTracker()
 
         print("\n" + "=" * 70)
         print("  FRAUD DETECTION SYSTEM - INICIJALIZACIJA")
@@ -211,9 +211,6 @@ class FraudDetectionSystem:
                 # model uci na tek prediktovanom
                 self.online_model.learn_one(x_dict, y_true)
 
-                if y_true:
-                    self.metrics_tracker.add_fraud_to_buffer(x_dict)
-
             batch_metrics = self.metrics_tracker.calculate_batch_metrics(
                 predictions=batch_predictions,
                 actuals=batch_actuals,
@@ -262,7 +259,6 @@ class FraudDetectionSystem:
             'initialized': self.is_initialized,
             'trained': self.is_trained,
             'current_batch': self.metrics_tracker.current_batch,
-            'total_frauds_in_buffer': len(self.metrics_tracker.fraud_buffer),
             'config': {
                 'sample_fraction': self.config.SAMPLE_FRACTION,
                 'use_balancing': self.config.USE_BALANCING,

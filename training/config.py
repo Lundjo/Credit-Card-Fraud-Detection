@@ -24,7 +24,6 @@ class Config:
 
     # streaming
     DEFAULT_BATCH_SIZE = 500
-    FRAUD_BUFFER_SIZE = 100
 
     # SEED za reproduktivnost
     RANDOM_SEED = 42
