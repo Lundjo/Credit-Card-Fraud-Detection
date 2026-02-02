@@ -87,7 +87,7 @@ class FraudDetectionSystem:
 
         return results
 
-    def _napravi_warmup_podatke(self, initial_data, warmup_samples):
+    def create_warmup_data(self, initial_data, warmup_samples):
         legit = initial_data[initial_data['Class'] == 0]
         fraud = initial_data[initial_data['Class'] == 1]
 
@@ -131,7 +131,7 @@ class FraudDetectionSystem:
             print(f"Broj primera za warm-up: {warmup_samples}")
 
             # pravljenje warmup dataseta
-            warmup_data = self._napravi_warmup_podatke(self.initial_data, warmup_samples)
+            warmup_data = self.create_warmup_data(self.initial_data, warmup_samples)
 
             feature_cols = [col for col in warmup_data.columns if col not in ['Class', 'Time']]
             fraud_count = 0
@@ -349,7 +349,7 @@ if __name__ == '__main__':
         config=custom_config
     )
 
-    # Pokreni kompletan pipeline SA WARM-START
+    # Pokreni kompletan pipeline
     report = system.run_complete_pipeline(
         batch_size=500,
         streaming_delay=0,  # Bez pauze za brže izvršavanje

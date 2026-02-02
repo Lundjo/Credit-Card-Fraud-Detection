@@ -11,15 +11,11 @@ class InitialModel:
         self.use_balancing = use_balancing
         self.config = config or Config()
         self.model = None
-        self.feature_names = None
 
     def train(self, X_train, y_train, X_val, y_val):
         print("\n" + "=" * 60)
         print("TRENIRANJE INICIJALNOG RANDOM FOREST MODELA")
         print("=" * 60)
-
-        # cuvanje feature names
-        self.feature_names = X_train.columns.tolist()
 
         # Prikaži distribuciju klasa pre balansiranja
         fraud_count = sum(y_train)
