@@ -1,6 +1,6 @@
 class Config:
 
-    SAMPLE_FRACTION = 1.0
+    SAMPLE_FRACTION = 0.2
     INITIAL_SPLIT = 0.7
 
     USE_BALANCING = True

@@ -9,10 +9,8 @@ from pathlib import Path
 import pandas as pd
 
 class FraudDetectionSystem:
-    def __init__(self, data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv', sample_fraction=1.0, use_balancing=True, config=None):
+    def __init__(self, data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv', config=None):
         self.config = config or Config()
-        self.config.SAMPLE_FRACTION = sample_fraction
-        self.config.USE_BALANCING = use_balancing
 
         self.data_path = data_path
         self.initial_data = None
