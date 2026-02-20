@@ -159,14 +159,14 @@ class FraudDetectionSystem:
         print("\n✓ Online model spreman za streaming!")
         return self.online_model
 
-    def simulate_streaming(self, batch_size=None, delay=0):
+    def simulate_streaming(self, delay=0):
         if not self.is_initialized:
             raise ValueError("Sistem nije inicijalizovan!")
 
         if self.online_model.model is None:
             raise ValueError("Online model nije inicijalizovan!")
 
-        batch_size = batch_size or self.config.DEFAULT_BATCH_SIZE
+        batch_size = self.config.DEFAULT_BATCH_SIZE
 
         print("\n" + "=" * 70)
         print("  KORAK 4: STREAMING SIMULACIJA")
@@ -273,7 +273,7 @@ class FraudDetectionSystem:
 
         print("\n✓ Svi podaci sačuvani!")
 
-    def run_complete_pipeline(self, batch_size=None, streaming_delay=0, save_results=True, warmup_samples=2000):
+    def run_complete_pipeline(self, streaming_delay=0, save_results=True, warmup_samples=2000):
         print("\n" + "🚀" * 35)
         print("  POKRETANJE KOMPLETNOG FRAUD DETECTION PIPELINE-A")
         print("  (RF → ARF Warm-Start → Streaming)")
@@ -285,7 +285,7 @@ class FraudDetectionSystem:
             self.load_and_prepare_data()
             initial_results = self.train_initial_model()
             self.initialize_online_model(warmup_samples=warmup_samples)
-            streaming_results = self.simulate_streaming(batch_size=batch_size, delay=streaming_delay)
+            streaming_results = self.simulate_streaming(delay=streaming_delay)
 
             if save_results:
                 self.save_all(Path(__file__).parent.parent / 'data' / 'metrics_history.json')
@@ -298,7 +298,7 @@ class FraudDetectionSystem:
                 'elapsed_time_seconds': elapsed,
                 'configuration': {
                     'warmup_samples': warmup_samples,
-                    'batch_size': batch_size or self.config.DEFAULT_BATCH_SIZE,
+                    'batch_size': self.config.DEFAULT_BATCH_SIZE,
                     'use_balancing': self.config.USE_BALANCING
                 },
                 'initial_model_results': initial_results,

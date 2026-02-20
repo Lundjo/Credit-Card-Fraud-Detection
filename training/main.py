@@ -4,15 +4,12 @@ from pathlib import Path
 import sys
 
 def print_menu():
-    print("\n" + "=" * 70)
-    print("  ODABIR KONFIGURACIJE")
-    print("=" * 70)
-    print("  1 - Podrazumijevana konfiguracija")
-    print("  2 - Balansirana konfiguracija (veća tačnost)")
-    print("  3 - Brzi test (mali uzorak, brže izvršavanje)")
-    print("  4 - Interaktivno podešavanje svih parametara")
-    print("  5 - Izlaz")
-    print("=" * 70)
+    print("  Test Selection")
+    print("  1 - Default")
+    print("  2 - Balanced")
+    print("  3 - Fast")
+    print("  4 - Custom")
+    print("  5 - Exit")
 
 def balanced(config):
     config.SAMPLE_FRACTION = 1.0
@@ -23,26 +20,18 @@ def balanced(config):
     config.RF_MAX_DEPTH = 30
     config.ARF_N_MODELS = 20
     config.ARF_LAMBDA = 10
-    config.DEFAULT_BATCH_SIZE = 1000
     return config
 
 def fast(config):
-    """Primijeni unaprijed definisanu brzu (testnu) konfiguraciju."""
     config.SAMPLE_FRACTION = 0.1
     config.USE_BALANCING = False
     config.RF_N_ESTIMATORS = 20
     config.RF_MAX_DEPTH = 10
     config.ARF_N_MODELS = 3
     config.ARF_LAMBDA = 3
-    config.DEFAULT_BATCH_SIZE = 200
     return config
 
 def editor(base_config):
-    """
-    Interaktivni meni za uređivanje konfiguracije.
-    base_config: početni config objekat (već može biti modifikovan presetom).
-    Vraća modifikovani config ako korisnik pokrene test, inače None.
-    """
     # Napravi kopiju trenutne konfiguracije (da bismo mogli odbaciti promjene)
     new_config = Config()
     for attr in dir(base_config):
@@ -113,53 +102,39 @@ def editor(base_config):
 if __name__ == '__main__':
     while True:
         print_menu()
-        choice = input("Vaš izbor (1-5): ").strip()
+        choice = input().strip()
 
         if choice == '5':
-            print("Izlaz iz programa.")
             sys.exit(0)
 
         if choice not in ['1', '2', '3', '4']:
-            print("Nepostojeća opcija. Pokušajte ponovo.")
+            print("Invalid selection")
             continue
 
         # Kreiraj osnovnu konfiguraciju
         custom_config = Config()
 
         # Primijeni odabranu opciju
-        if choice == '1':
-            print("Koristi se podrazumijevana konfiguracija.")
-        elif choice == '2':
-            print("Primjenjuje se balansirana konfiguracija...")
+        if choice == '2':
             custom_config = balanced(custom_config)
         elif choice == '3':
-            print("Primjenjuje se konfiguracija za brzi test...")
             custom_config = fast(custom_config)
         elif choice == '4':
-            print("Ulazak u interaktivni režim...")
             modified_config = custom_config = editor(custom_config)
             if modified_config is None:
                 continue
             else:
                 custom_config = modified_config
 
-        # Prikaži konačnu konfiguraciju (opciono)
-        print("\nKonačna konfiguracija:")
-        for attr in sorted([a for a in dir(custom_config) if a.isupper() and not callable(getattr(custom_config, a))]):
-            print(f"  {attr} = {getattr(custom_config, attr)}")
-
-        # Kreiraj sistem
         system = FraudDetectionSystem(
             data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv',
             config=custom_config
         )
 
-        # Pokreni kompletan pipeline
         report = system.run_complete_pipeline(
-            batch_size=500,
-            streaming_delay=0,  # Bez pauze za brže izvršavanje
+            streaming_delay=0,  # ako treba za simulaciju cekanja na sledecu transakciju
             save_results=True,
-            warmup_samples=2000  # ✅ ARF će prvo naučiti 2000 primera iz RF-a
+            warmup_samples=2000
         )
 
         print("\n" + "=" * 70)
