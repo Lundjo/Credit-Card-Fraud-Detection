@@ -4,12 +4,12 @@ from pathlib import Path
 import sys
 
 def print_menu():
-    print("  Test Selection")
-    print("  1 - Default")
-    print("  2 - Balanced")
-    print("  3 - Fast")
-    print("  4 - Custom")
-    print("  5 - Exit")
+    print("\nTest Selection")
+    print("1.  Default")
+    print("2. Balanced")
+    print("3. Fast")
+    print("4. Custom")
+    print("5. Exit")
 
 def balanced(config):
     config.SAMPLE_FRACTION = 1.0
@@ -31,73 +31,65 @@ def fast(config):
     config.ARF_LAMBDA = 3
     return config
 
-def editor(base_config):
-    # Napravi kopiju trenutne konfiguracije (da bismo mogli odbaciti promjene)
+def custom():
     new_config = Config()
-    for attr in dir(base_config):
-        if attr.isupper() and not callable(getattr(base_config, attr)):
-            setattr(new_config, attr, getattr(base_config, attr))
 
-    # Svi parametri koji se mogu uređivati (velika slova)
-    params = sorted([attr for attr in dir(new_config) if attr.isupper() and not callable(getattr(new_config, attr))])
+    # ostavljanje samo zeljenih parametara za izmenu
+    excluded_params = {'DEFAULT_BATCH_SIZE', 'RANDOM_SEED', 'RF_N_JOBS'}
+    params = []
+    for attr in dir(new_config):
+        if attr in excluded_params:
+            continue
+        value = getattr(new_config, attr)
+        if type(value) in (int, float) and not isinstance(value, bool):
+            params.append(attr)
 
     while True:
-        print("\n--- INTERAKTIVNO PODEŠAVANJE KONFIGURACIJE ---")
-        print("Odaberite parametar za promjenu (unos broja):\n")
+        print("\nChange parameter\n")
 
         for i, param in enumerate(params, 1):
-            print(f"  {i}. {param} = {getattr(new_config, param)}")
+            print(f"{i}. {param} = {getattr(new_config, param)}")
 
-        print(f"\n  {len(params) + 1}. 🚀 Pokreni test sa trenutnim podešavanjima")
-        print(f"  {len(params) + 2}. ↩️  Nazad na glavni meni (odbaci promjene)")
+        print(f"\n{len(params) + 1}. Apply and start")
+        print(f"{len(params) + 2}. Drop changes and exit")
 
         try:
-            choice = int(input("\nVaš izbor: ").strip())
+            choice = int(input().strip())
         except ValueError:
-            print("Molimo unesite broj.")
+            print("Invalid selection")
             continue
 
+        # Opcija za promjenu parametra
         if 1 <= choice <= len(params):
-            # Odabran parametar
             param = params[choice - 1]
             current_value = getattr(new_config, param)
-            print(f"\nTrenutna vrijednost '{param}': {current_value}")
-            new_input = input("Unesite novu vrijednost (Enter za odustajanje): ").strip()
+            print(f"\nCurrent value '{param}': {current_value}")
+            new_input = input("Change value or leave blank to cancel: ").strip()
             if new_input == "":
-                print("Promjena otkazana.")
                 continue
 
-            # Konverzija tipa
+            # konverzija u odgovarajuci tip
             try:
-                if isinstance(current_value, bool):
-                    converted = new_input.lower() in ['da', 'true', '1', 'yes', 'y']
-                elif isinstance(current_value, int):
+                if isinstance(current_value, int):
                     converted = int(new_input)
                 elif isinstance(current_value, float):
                     converted = float(new_input)
-                elif isinstance(current_value, str):
-                    converted = new_input
                 else:
-                    converted = new_input  # fallback
+                    converted = new_input
             except ValueError:
-                print(f"Greška: '{new_input}' nije odgovarajućeg tipa ({type(current_value).__name__}).")
+                print("Invalid value\n")
                 continue
 
             setattr(new_config, param, converted)
-            print(f"✅ Parametar '{param}' postavljen na {converted}")
 
         elif choice == len(params) + 1:
-            # Pokreni test
-            print("\nZavršeno uređivanje. Pokrećem test...")
             return new_config
 
         elif choice == len(params) + 2:
-            # Nazad bez promjena
-            print("\nOdustajem od promjena. Vraćam se na glavni meni.")
             return None
 
         else:
-            print("Nepostojeća opcija.")
+            print("Invalid selection")
 
 if __name__ == '__main__':
     while True:
@@ -111,16 +103,14 @@ if __name__ == '__main__':
             print("Invalid selection")
             continue
 
-        # Kreiraj osnovnu konfiguraciju
         custom_config = Config()
 
-        # Primijeni odabranu opciju
         if choice == '2':
             custom_config = balanced(custom_config)
         elif choice == '3':
             custom_config = fast(custom_config)
         elif choice == '4':
-            modified_config = custom_config = editor(custom_config)
+            modified_config = custom()
             if modified_config is None:
                 continue
             else:
