@@ -183,3 +183,4 @@ cython_debug/
 data/creditcard.csv
 data/metrics_history.json
 /data
+data/initial_rf_model.pkl

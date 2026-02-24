@@ -73,8 +73,7 @@ class InitialModel:
             min_samples_leaf=self.config.RF_MIN_SAMPLES_LEAF,
             class_weight=self.config.RF_CLASS_WEIGHT,
             random_state=self.config.RANDOM_SEED,
-            n_jobs=self.config.RF_N_JOBS,
-            verbose=1  # progress
+            n_jobs=self.config.RF_N_JOBS
         )
 
         self.model.fit(X_train_final, y_train_final)

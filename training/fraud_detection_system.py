@@ -135,13 +135,18 @@ class FraudDetectionSystem:
             fraud_count = 0
             legit_count = 0
 
+            # predikcija obicnog modela
+            X_warmup = warmup_data[feature_cols]
+            rf_labels = self.initial_model.predict(X_warmup)
+
             print(f"\nUčenje u toku...")
-            for idx, row in warmup_data.iterrows():
+            for i, (idx, row) in enumerate(warmup_data.iterrows()):
                 x_dict = {col: float(row[col]) for col in feature_cols} # pretvara se u dict koji je ocekivani format
                 y_true = bool(row['Class'])
+                rf_label = bool(rf_labels[i]) # sta je obican model pretpostavio
 
                 # poziv samo ugradjene metode jer se iskljucivo uci, ne evaluira se
-                self.online_model.model.learn_one(x_dict, y_true)
+                self.online_model.model.learn_one(x_dict, rf_label)
 
                 if y_true:
                     fraud_count += 1
