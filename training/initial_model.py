@@ -3,7 +3,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.pipeline import Pipeline as ImbPipeline
-import joblib
+
 
 class InitialModel:
     def __init__(self, use_balancing, config):
@@ -136,13 +136,3 @@ class InitialModel:
         if self.model is None:
             raise ValueError("Model nije istreniran!")
         return self.model.predict_proba(X)
-
-    def save(self, filepath):
-        if self.model is None:
-            raise ValueError("Model nije istreniran!")
-        joblib.dump(self.model, filepath)
-        print(f"\n✓ Model sačuvan: {filepath}")
-
-    def load(self, filepath):
-        self.model = joblib.load(filepath)
-        print(f"✓ Model učitan: {filepath}")

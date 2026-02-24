@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class DataLoader:
     def __init__(self, data_path, sample_fraction, random_seed):
         self.data_path = data_path

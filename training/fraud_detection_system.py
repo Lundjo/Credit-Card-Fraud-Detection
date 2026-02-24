@@ -8,6 +8,7 @@ from metrics_tracker import MetricsTracker
 from pathlib import Path
 import pandas as pd
 
+
 class FraudDetectionSystem:
     def __init__(self, data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv', config=None):
         self.config = config or Config()
@@ -76,9 +77,6 @@ class FraudDetectionSystem:
 
         # sacuvaj metrike inicijalnog modela
         self.metrics_tracker.add_initial_metrics(results, model_type='initial_rf')
-
-        # sacuvaj model
-        self.initial_model.save(Path(__file__).parent.parent / 'data' / 'initial_rf_model.pkl')
 
         self.is_trained = True
         print("\n✓ Inicijalni model uspešno istreniran!")
@@ -274,7 +272,7 @@ class FraudDetectionSystem:
         print("  ČUVANJE SISTEMA")
         print("=" * 70)
 
-        self.metrics_tracker.save_to_file(metrics_file)
+        self.metrics_tracker.save_to_file()
 
         print("\n✓ Svi podaci sačuvani!")
 

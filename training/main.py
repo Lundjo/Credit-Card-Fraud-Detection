@@ -3,6 +3,7 @@ from fraud_detection_system import FraudDetectionSystem
 from pathlib import Path
 import sys
 
+
 def print_menu():
     print("\nTest Selection")
     print("1. Default")
@@ -10,6 +11,7 @@ def print_menu():
     print("3. Fast")
     print("4. Custom")
     print("5. Exit")
+
 
 def balanced(config):
     config.SAMPLE_FRACTION = 1.0
@@ -22,6 +24,7 @@ def balanced(config):
     config.ARF_LAMBDA = 10
     return config
 
+
 def fast(config):
     config.SAMPLE_FRACTION = 0.1
     config.USE_BALANCING = False
@@ -30,6 +33,7 @@ def fast(config):
     config.ARF_N_MODELS = 3
     config.ARF_LAMBDA = 3
     return config
+
 
 def custom():
     new_config = Config()
@@ -90,6 +94,7 @@ def custom():
 
         else:
             print("Invalid selection")
+
 
 if __name__ == '__main__':
     while True:

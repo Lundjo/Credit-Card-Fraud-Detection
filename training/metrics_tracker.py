@@ -1,18 +1,19 @@
 import json
 from datetime import datetime
-from collections import deque
 import numpy as np
 from sklearn.metrics import confusion_matrix
+from pathlib import Path
+
 
 class MetricsTracker:
-    def __init__(self, fraud_buffer_size=100):
+    def __init__(self,):
         self.metrics_history = []  # lista svih metrika po batchevima
         self.current_batch = 0  # broj trenutnog batcha
 
     # rezultati obicnog rf
-    def add_initial_metrics(self, metrics, model_type='initial_rf'):
+    def add_initial_metrics(self, metrics, model_type):
         metric_entry = {
-            'timestamp': datetime.now().isoformat(), # kada je sacuvano
+            'timestamp': datetime.now().isoformat(),  # kada je sacuvano
             'batch': 0,  # inicijalni model je batch 0
             'model_type': model_type,
             **metrics  # dodaje sve metrike u ovu novu
@@ -47,8 +48,8 @@ class MetricsTracker:
         fpr = fp / (fp + tn) if (fp + tn) > 0 else 0
 
         # roc kriva za odredjivanje kvaliteta modela
-        fraud_probs = [p for p, a in zip(probabilities, actuals) if a] # ako je prevara sacuvaj verovatnocu
-        legit_probs = [p for p, a in zip(probabilities, actuals) if not a] # verovatnoca za legitimnu
+        fraud_probs = [p for p, a in zip(probabilities, actuals) if a]  # ako je prevara sacuvaj verovatnocu
+        legit_probs = [p for p, a in zip(probabilities, actuals) if not a]  # verovatnoca za legitimnu
 
         # prosek treba biti sto veci za fraud, a sto manji za legit
         avg_fraud_proba = np.mean(fraud_probs) if fraud_probs else 0
@@ -196,7 +197,7 @@ class MetricsTracker:
 
         return trends
 
-    def save_to_file(self, filepath='metrics_history.json'):
+    def save_to_file(self):
         data = {
             'export_time': datetime.now().isoformat(),
             'total_batches': len(self.metrics_history),
@@ -205,17 +206,5 @@ class MetricsTracker:
             'trends': self.get_trend_analysis()
         }
 
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(Path(__file__).parent.parent / 'data' / 'metrics_history.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-
-        print(f"\n✓ Metrike sačuvane u: {filepath}")
-
-    def load_from_file(self, filepath='metrics_history.json'):
-        with open(filepath, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-
-        self.metrics_history = data['metrics_history']
-        self.current_batch = len([m for m in self.metrics_history if m['model_type'] == 'online_arf'])
-
-        print(f"✓ Metrike učitane iz: {filepath}")
-        print(f"  Batch-eva: {self.current_batch}")
