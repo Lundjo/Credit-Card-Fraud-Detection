@@ -21,6 +21,7 @@ class Config:
     ARF_N_MODELS = 10  # broj stabala
     ARF_MAX_FEATURES = 'sqrt'  # broj karakteristika
     ARF_LAMBDA = 6  # zamena stabala novim
+    ARF_THRESHOLD = 0.1
 
     # streaming
     DEFAULT_BATCH_SIZE = 500

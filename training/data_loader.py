@@ -53,9 +53,3 @@ class DataLoader:
         print(f"  - Prevare: {len(streaming_data[streaming_data['Class'] == 1]):,}")
 
         return initial_data, streaming_data
-
-    def get_feature_names(self):
-        if self.data is None:
-            raise ValueError("Podaci nisu učitani!")
-
-        return [col for col in self.data.columns if col not in ['Class', 'Time']]

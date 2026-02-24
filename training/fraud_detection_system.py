@@ -10,19 +10,18 @@ import pandas as pd
 
 
 class FraudDetectionSystem:
-    def __init__(self, data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv', config=None):
+    def __init__(self, config=None):
         self.config = config or Config()
 
-        self.data_path = data_path
+        self.data_path = Path(__file__).parent.parent / 'data' / 'creditcard.csv'
         self.initial_data = None
         self.streaming_data = None
-        self.feature_names = None # obrisati?
         self.is_initialized = False
         self.is_trained = False
 
         self.data_loader = DataLoader(data_path=self.data_path, sample_fraction=self.config.SAMPLE_FRACTION, random_seed=self.config.RANDOM_SEED)
         self.initial_model = InitialModel(use_balancing=self.config.USE_BALANCING, config=self.config)
-        self.online_model = OnlineModel(self.config, threshold=0.1)
+        self.online_model = OnlineModel(self.config)
         self.metrics_tracker = MetricsTracker()
 
         print("\n" + "=" * 70)
@@ -42,7 +41,6 @@ class FraudDetectionSystem:
 
         self.data_loader.load_data()
         self.initial_data, self.streaming_data = self.data_loader.split_data(self.config.INITIAL_SPLIT)
-        self.feature_names = self.data_loader.get_feature_names()
 
         self.is_initialized = True
         print("\n✓ Podaci uspešno učitani i podeljeni!")
@@ -108,7 +106,7 @@ class FraudDetectionSystem:
 
         return warmup_data
 
-    def initialize_online_model(self, warmup_samples=2000):
+    def initialize_online_model(self, warmup_samples):
         if not self.is_trained:
             print("⚠️  Inicijalni model nije treniran, ali nastavljamo sa online modelom...")
 
@@ -162,7 +160,7 @@ class FraudDetectionSystem:
         print("\n✓ Online model spreman za streaming!")
         return self.online_model
 
-    def simulate_streaming(self, delay=0):
+    def simulate_streaming(self, delay):
         if not self.is_initialized:
             raise ValueError("Sistem nije inicijalizovan!")
 
@@ -267,16 +265,7 @@ class FraudDetectionSystem:
             }
         }
 
-    def save_all(self, metrics_file='metrics_history.json'):
-        print("\n" + "=" * 70)
-        print("  ČUVANJE SISTEMA")
-        print("=" * 70)
-
-        self.metrics_tracker.save_to_file()
-
-        print("\n✓ Svi podaci sačuvani!")
-
-    def run_complete_pipeline(self, streaming_delay=0, warmup_samples=2000):
+    def run_complete_pipeline(self, streaming_delay, warmup_samples):
         print("\n" + "🚀" * 35)
         print("  POKRETANJE KOMPLETNOG FRAUD DETECTION PIPELINE-A")
         print("  (RF → ARF Warm-Start → Streaming)")
@@ -290,7 +279,7 @@ class FraudDetectionSystem:
             self.initialize_online_model(warmup_samples=warmup_samples)
             streaming_results = self.simulate_streaming(delay=streaming_delay)
 
-            self.save_all(Path(__file__).parent.parent / 'data' / 'metrics_history.json')
+            self.metrics_tracker.save_to_file()
 
             end_time = time.time()
             elapsed = end_time - start_time

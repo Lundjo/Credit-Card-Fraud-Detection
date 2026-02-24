@@ -122,7 +122,6 @@ if __name__ == '__main__':
                 custom_config = modified_config
 
         system = FraudDetectionSystem(
-            Path(__file__).parent.parent / 'data' / 'creditcard.csv',
             custom_config
         )
 

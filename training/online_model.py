@@ -2,10 +2,10 @@ from river import forest, metrics
 
 
 class OnlineModel:
-    def __init__(self, config, threshold):
+    def __init__(self, config):
         self.config = config
         self.model = None
-        self.threshold = threshold
+        self.threshold = self.config.ARF_THRESHOLD
 
         # online metrike koje se azuriraju sa svakom transakcijom
         self.accuracy = metrics.Accuracy()
