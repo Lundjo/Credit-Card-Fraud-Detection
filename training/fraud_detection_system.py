@@ -15,13 +15,13 @@ class FraudDetectionSystem:
         self.data_path = data_path
         self.initial_data = None
         self.streaming_data = None
-        self.feature_names = None
+        self.feature_names = None # obrisati?
         self.is_initialized = False
         self.is_trained = False
 
         self.data_loader = DataLoader(data_path=self.data_path, sample_fraction=self.config.SAMPLE_FRACTION, random_seed=self.config.RANDOM_SEED)
         self.initial_model = InitialModel(use_balancing=self.config.USE_BALANCING, config=self.config)
-        self.online_model = OnlineModel(config=self.config)
+        self.online_model = OnlineModel(self.config, threshold=0.1)
         self.metrics_tracker = MetricsTracker()
 
         print("\n" + "=" * 70)
@@ -40,7 +40,7 @@ class FraudDetectionSystem:
         print("=" * 70)
 
         self.data_loader.load_data()
-        self.initial_data, self.streaming_data = self.data_loader.split_data(initial_split=self.config.INITIAL_SPLIT)
+        self.initial_data, self.streaming_data = self.data_loader.split_data(self.config.INITIAL_SPLIT)
         self.feature_names = self.data_loader.get_feature_names()
 
         self.is_initialized = True
@@ -273,7 +273,7 @@ class FraudDetectionSystem:
 
         print("\n✓ Svi podaci sačuvani!")
 
-    def run_complete_pipeline(self, streaming_delay=0, save_results=True, warmup_samples=2000):
+    def run_complete_pipeline(self, streaming_delay=0, warmup_samples=2000):
         print("\n" + "🚀" * 35)
         print("  POKRETANJE KOMPLETNOG FRAUD DETECTION PIPELINE-A")
         print("  (RF → ARF Warm-Start → Streaming)")
@@ -287,8 +287,7 @@ class FraudDetectionSystem:
             self.initialize_online_model(warmup_samples=warmup_samples)
             streaming_results = self.simulate_streaming(delay=streaming_delay)
 
-            if save_results:
-                self.save_all(Path(__file__).parent.parent / 'data' / 'metrics_history.json')
+            self.save_all(Path(__file__).parent.parent / 'data' / 'metrics_history.json')
 
             end_time = time.time()
             elapsed = end_time - start_time

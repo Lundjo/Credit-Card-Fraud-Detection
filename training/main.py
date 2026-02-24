@@ -5,7 +5,7 @@ import sys
 
 def print_menu():
     print("\nTest Selection")
-    print("1.  Default")
+    print("1. Default")
     print("2. Balanced")
     print("3. Fast")
     print("4. Custom")
@@ -117,13 +117,12 @@ if __name__ == '__main__':
                 custom_config = modified_config
 
         system = FraudDetectionSystem(
-            data_path=Path(__file__).parent.parent / 'data' / 'creditcard.csv',
-            config=custom_config
+            Path(__file__).parent.parent / 'data' / 'creditcard.csv',
+            custom_config
         )
 
         report = system.run_complete_pipeline(
             streaming_delay=0,  # ako treba za simulaciju cekanja na sledecu transakciju
-            save_results=True,
             warmup_samples=2000
         )
 

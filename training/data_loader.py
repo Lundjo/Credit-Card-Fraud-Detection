@@ -1,7 +1,7 @@
 import pandas as pd
 
 class DataLoader:
-    def __init__(self, data_path, sample_fraction=1.0, random_seed=42):
+    def __init__(self, data_path, sample_fraction, random_seed):
         self.data_path = data_path
         self.sample_fraction = sample_fraction
         self.random_seed = random_seed
@@ -35,7 +35,7 @@ class DataLoader:
 
         return self.data
 
-    def split_data(self, initial_split=0.7):
+    def split_data(self, initial_split):
         if self.data is None:
             raise ValueError("Podaci nisu učitani! Pozovi prvo load_data()")
 

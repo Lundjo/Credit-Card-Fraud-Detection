@@ -2,8 +2,8 @@ from river import forest, metrics
 from config import Config
 
 class OnlineModel:
-    def __init__(self, config=None, threshold=0.1):
-        self.config = config or Config()
+    def __init__(self, config, threshold):
+        self.config = config
         self.model = None
         self.threshold = threshold
 

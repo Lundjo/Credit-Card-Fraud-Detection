@@ -4,12 +4,11 @@ from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.pipeline import Pipeline as ImbPipeline
 import joblib
-from training.config import Config
 
 class InitialModel:
-    def __init__(self, use_balancing=True, config=None):
+    def __init__(self, use_balancing, config):
         self.use_balancing = use_balancing
-        self.config = config or Config()
+        self.config = config
         self.model = None
 
     def train(self, X_train, y_train, X_val, y_val):
@@ -119,7 +118,7 @@ class InitialModel:
         print(f"  F1-Score:  {f1 * 100:.2f}%")
         print(f"  ROC-AUC:   {auc:.4f}")
 
-        # Vrati rezultate
+        # vrati rezultate
         return {
             'accuracy': accuracy,
             'precision': precision,
@@ -139,12 +138,12 @@ class InitialModel:
             raise ValueError("Model nije istreniran!")
         return self.model.predict_proba(X)
 
-    def save(self, filepath='initial_rf_model.pkl'):
+    def save(self, filepath):
         if self.model is None:
             raise ValueError("Model nije istreniran!")
         joblib.dump(self.model, filepath)
         print(f"\n✓ Model sačuvan: {filepath}")
 
-    def load(self, filepath='initial_rf_model.pkl'):
+    def load(self, filepath):
         self.model = joblib.load(filepath)
         print(f"✓ Model učitan: {filepath}")
