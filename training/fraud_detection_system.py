@@ -19,8 +19,8 @@ class FraudDetectionSystem:
         self.is_initialized = False
         self.is_trained = False
 
-        self.data_loader = DataLoader(data_path=self.data_path, sample_fraction=self.config.SAMPLE_FRACTION, random_seed=self.config.RANDOM_SEED)
-        self.initial_model = InitialModel(use_balancing=self.config.USE_BALANCING, config=self.config)
+        self.data_loader = DataLoader(self.data_path, self.config.SAMPLE_FRACTION, self.config.RANDOM_SEED)
+        self.initial_model = InitialModel(self.config.USE_BALANCING, self.config)
         self.online_model = OnlineModel(self.config)
         self.metrics_tracker = MetricsTracker()
 
@@ -74,7 +74,7 @@ class FraudDetectionSystem:
         results = self.initial_model.train(X_train, y_train, X_val, y_val)
 
         # sacuvaj metrike inicijalnog modela
-        self.metrics_tracker.add_initial_metrics(results, model_type='initial_rf')
+        self.metrics_tracker.add_initial_metrics(results, 'initial_rf')
 
         self.is_trained = True
         print("\n✓ Inicijalni model uspešno istreniran!")
@@ -211,10 +211,10 @@ class FraudDetectionSystem:
                 self.online_model.learn_one(x_dict, y_true)
 
             batch_metrics = self.metrics_tracker.calculate_batch_metrics(
-                predictions=batch_predictions,
-                actuals=batch_actuals,
-                probabilities=batch_probabilities,
-                batch_num=batch_num
+                batch_predictions,
+                batch_actuals,
+                batch_probabilities,
+                batch_num
             )
 
             batch_results.append(batch_metrics)
@@ -276,8 +276,8 @@ class FraudDetectionSystem:
         try:
             self.load_and_prepare_data()
             initial_results = self.train_initial_model()
-            self.initialize_online_model(warmup_samples=warmup_samples)
-            streaming_results = self.simulate_streaming(delay=streaming_delay)
+            self.initialize_online_model(warmup_samples)
+            streaming_results = self.simulate_streaming(streaming_delay)
 
             self.metrics_tracker.save_to_file()
 

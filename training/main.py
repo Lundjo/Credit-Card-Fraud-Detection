@@ -1,6 +1,5 @@
 from config import Config
 from fraud_detection_system import FraudDetectionSystem
-from pathlib import Path
 import sys
 
 
@@ -126,8 +125,8 @@ if __name__ == '__main__':
         )
 
         report = system.run_complete_pipeline(
-            streaming_delay=0,  # ako treba za simulaciju cekanja na sledecu transakciju
-            warmup_samples=2000
+            0,  # ako treba za simulaciju cekanja na sledecu transakciju
+            2000
         )
 
         print("\n" + "=" * 70)
