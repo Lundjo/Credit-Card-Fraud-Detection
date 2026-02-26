@@ -129,15 +129,7 @@ if __name__ == '__main__':
             2000
         )
 
-        print("\n" + "=" * 70)
-        print("  FINALNI IZVEŠTAJ")
-        print("=" * 70)
-        print(f"\nVreme izvršavanja: {report['elapsed_time_seconds']:.2f}s")
-        print(f"Inicijalni RF F1-Score: {report['initial_model_results']['f1'] * 100:.2f}%")
-
         if report['streaming_results']:
             sr = report['streaming_results']
             print(f"\nUkupno detektovano prevara: {sr['detected_frauds']}/{sr['fraud_count']}")
             print(f"Overall Detection Rate: {sr['detection_rate'] * 100:.2f}%")
-
-            print(f"\n💡 ARF je počeo sa {report['configuration']['warmup_samples']} primera znanja iz RF-a!")

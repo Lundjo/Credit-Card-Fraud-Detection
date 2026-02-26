@@ -10,10 +10,6 @@ class MetricsTracker:
         self.metrics_history = []
         self.current_batch = 0
 
-    # rezultati obicnog rf - samo ispis, ne cuva se
-    def add_initial_metrics(self, metrics):
-        print(f"\n✓ Inicijalne metrike RF modela zabeležene")
-
     def calculate_final_metrics(self, predictions, actuals, probabilities):
         # pretvara se u niz zbog brzine
         y_true = np.array(actuals, dtype=int)

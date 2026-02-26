@@ -15,14 +15,6 @@ class OnlineModel:
         self.auc = metrics.ROCAUC()
 
     def initialize(self):
-        print("\n" + "=" * 60)
-        print("INICIJALIZACIJA ONLINE MODELA (ARF Classifier)")
-        print("=" * 60)
-        print(f"Broj stabala: {self.config.ARF_N_MODELS}")
-        print(f"Max features: {self.config.ARF_MAX_FEATURES}")
-        print(f"Lambda: {self.config.ARF_LAMBDA}")
-        print(f"Threshold: {self.threshold}")
-
         self.model = forest.ARFClassifier(
             n_models=self.config.ARF_N_MODELS,
             max_features=self.config.ARF_MAX_FEATURES,
@@ -30,7 +22,6 @@ class OnlineModel:
             seed=self.config.RANDOM_SEED
         )
 
-        print("✓ Online model kreiran!")
         return self.model
 
     # metoda za online ucenje

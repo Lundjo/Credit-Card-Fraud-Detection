@@ -24,36 +24,17 @@ class FraudDetectionSystem:
         self.online_model = OnlineModel(self.config)
         self.metrics_tracker = MetricsTracker()
 
-        print("\n" + "=" * 70)
-        print("  FRAUD DETECTION SYSTEM - INICIJALIZACIJA")
-        print("=" * 70)
-        print(f"📁 Dataset: {self.data_path}")
-        print(f"📊 Sample: {self.config.SAMPLE_FRACTION * 100}% podataka")
-        print(f"⚖️  Balansiranje: {'DA' if self.config.USE_BALANCING else 'NE'}")
-        print(f"🌲 RF Stabla: {self.config.RF_N_ESTIMATORS}")
-        print(f"🌲 ARF Stabla: {self.config.ARF_N_MODELS}")
-        print("=" * 70)
-
     def load_and_prepare_data(self):
-        print("\n" + "=" * 70)
-        print("  KORAK 1: UČITAVANJE I PRIPREMA PODATAKA")
-        print("=" * 70)
-
         self.data_loader.load_data()
         self.initial_data, self.streaming_data = self.data_loader.split_data(self.config.INITIAL_SPLIT)
 
         self.is_initialized = True
-        print("\n✓ Podaci uspešno učitani i podeljeni!")
 
         return self.initial_data, self.streaming_data
 
     def train_initial_model(self):
         if not self.is_initialized:
             raise ValueError("Sistem nije inicijalizovan! Pozovi load_and_prepare_data() prvo.")
-
-        print("\n" + "=" * 70)
-        print("  KORAK 2: TRENIRANJE INICIJALNOG MODELA")
-        print("=" * 70)
 
         # pripremi podatke za trening
         X = self.initial_data.drop(['Class', 'Time'], axis=1)
@@ -67,17 +48,10 @@ class FraudDetectionSystem:
             stratify=y  # odrzi proporciju prevara u oba skupa
         )
 
-        print(f"\nTrain set: {len(X_train):,} transakcija")
-        print(f"Validation set: {len(X_val):,} transakcija")
-
         # treniraj model
         results = self.initial_model.train(X_train, y_train, X_val, y_val)
 
-        # sacuvaj metrike inicijalnog modela
-        self.metrics_tracker.add_initial_metrics(results)
-
         self.is_trained = True
-        print("\n✓ Inicijalni model uspešno istreniran!")
 
         return results
 
@@ -110,20 +84,11 @@ class FraudDetectionSystem:
         if not self.is_trained:
             print("⚠️  Inicijalni model nije treniran, ali nastavljamo sa online modelom...")
 
-        print("\n" + "=" * 70)
-        print("  KORAK 3: INICIJALIZACIJA ONLINE MODELA (Warm-Start)")
-        print("=" * 70)
-
         # inicijalizuj prazan ARF model
         self.online_model.initialize()
 
         # online model prvo uci od obicnog
         if warmup_samples > 0 and self.initial_data is not None:
-            print(f"\n{'=' * 70}")
-            print(f"🔥 WARM-UP FAZA: ARF uči od RF modela")
-            print(f"{'=' * 70}")
-            print(f"Broj primera za warm-up: {warmup_samples}")
-
             # pravljenje warmup dataseta
             warmup_data = self.create_warmup_data(self.initial_data, warmup_samples)
 
@@ -153,11 +118,9 @@ class FraudDetectionSystem:
             print(f"  Ukupno naučeno: {len(warmup_data):,} primera")
             print(f"  - Legitimne transakcije: {legit_count:,}")
             print(f"  - Prevare: {fraud_count:,}")
-            print(f"\n💡 ARF model sada ima bazno znanje iz RF modela!")
         else:
             print("\n⚠️  Warm-up preskoćen (warmup_samples=0)")
 
-        print("\n✓ Online model spreman za streaming!")
         return self.online_model
 
     def simulate_streaming(self, delay):
@@ -169,9 +132,6 @@ class FraudDetectionSystem:
 
         batch_size = self.config.DEFAULT_BATCH_SIZE
 
-        print("\n" + "=" * 70)
-        print("  KORAK 4: STREAMING SIMULACIJA")
-        print("=" * 70)
         print(f"📦 Batch veličina: {batch_size}")
         print(f"🔄 Ukupno batch-eva: {len(self.streaming_data) // batch_size}")
         print(f"⏱️  Delay: {delay}s")
@@ -252,19 +212,6 @@ class FraudDetectionSystem:
             all_probabilities
         )
 
-        print(f"\n📊 UKUPNO PROCESOVANO:")
-        print(f"  Transakcija: {final_metrics['total_transactions']:,}")
-        print(f"  Prevara: {final_metrics['fraud_count']:,}")
-        print(f"  Detektovano: {final_metrics['detected_frauds']:,}")
-        print(f"  Propušteno: {final_metrics['missed_frauds']:,}")
-        print(f"  Detection Rate: {final_metrics['detection_rate'] * 100:.2f}%")
-
-        print(f"\n📈 FINALNE METRIKE:")
-        print(f"  Accuracy:  {final_metrics['accuracy'] * 100:.2f}%")
-        print(f"  Precision: {final_metrics['precision'] * 100:.2f}%")
-        print(f"  Recall:    {final_metrics['recall'] * 100:.2f}%")
-        print(f"  F1-Score:  {final_metrics['f1'] * 100:.2f}%")
-
         return final_metrics
 
     def get_current_status(self):
@@ -280,13 +227,6 @@ class FraudDetectionSystem:
         }
 
     def run_complete_pipeline(self, streaming_delay, warmup_samples):
-        print("\n" + "🚀" * 35)
-        print("  POKRETANJE KOMPLETNOG FRAUD DETECTION PIPELINE-A")
-        print("  (RF → ARF Warm-Start → Streaming)")
-        print("🚀" * 35 + "\n")
-
-        start_time = time.time()
-
         try:
             self.load_and_prepare_data()
             initial_results = self.train_initial_model()
@@ -295,12 +235,8 @@ class FraudDetectionSystem:
 
             self.metrics_tracker.save_to_file()
 
-            end_time = time.time()
-            elapsed = end_time - start_time
-
             report = {
                 'success': True,
-                'elapsed_time_seconds': elapsed,
                 'configuration': {
                     'warmup_samples': warmup_samples,
                     'batch_size': self.config.DEFAULT_BATCH_SIZE,
@@ -310,9 +246,6 @@ class FraudDetectionSystem:
                 'streaming_results': streaming_results,
                 'system_status': self.get_current_status()
             }
-
-            print(f"\n⏱️  Ukupno vreme: {elapsed:.2f} sekundi")
-            print("✅ PIPELINE USPEŠNO ZAVRŠEN!\n")
 
             return report
 

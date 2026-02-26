@@ -9,17 +9,9 @@ class DataLoader:
         self.data = None
 
     def load_data(self):
-        print(f"Učitavam podatke iz: {self.data_path}")
-
         self.data = pd.read_csv(self.data_path)
 
-        print(f"Ukupno transakcija: {len(self.data):,}")
-        print(
-            f"Prevare: {len(self.data[self.data['Class'] == 1]):,} ({len(self.data[self.data['Class'] == 1]) / len(self.data) * 100:.2f}%)")
-
         if self.sample_fraction < 1.0:
-            print(f"\nKoristi se {self.sample_fraction * 100}% podataka (sample)")
-
             # da bi se osiguralo da ostaje isti odnos uzima se isti procenat od obe klase
             self.data = (
                 self.data
@@ -27,9 +19,6 @@ class DataLoader:
                 .sample(frac=self.sample_fraction, random_state=self.random_seed)
                 .reset_index(drop=True) # resetuje indexe zbog brze obrade
             )
-
-            print(f"Nakon samplinga: {len(self.data):,} transakcija")
-            print(f"Prevare: {len(self.data[self.data['Class'] == 1]):,}")
 
             # shuffle podataka
             self.data = self.data.sample(frac=1, random_state=self.random_seed).reset_index(drop=True)
@@ -45,11 +34,5 @@ class DataLoader:
         # podela podataka offline i online
         initial_data = self.data.iloc[:split_idx].copy()
         streaming_data = self.data.iloc[split_idx:].copy()
-
-        print(f"\n=== PODELA PODATAKA ===")
-        print(f"Inicijalni set: {len(initial_data):,} transakcija")
-        print(f"  - Prevare: {len(initial_data[initial_data['Class'] == 1]):,}")
-        print(f"Streaming set: {len(streaming_data):,} transakcija")
-        print(f"  - Prevare: {len(streaming_data[streaming_data['Class'] == 1]):,}")
 
         return initial_data, streaming_data
