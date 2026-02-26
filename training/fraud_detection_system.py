@@ -74,7 +74,7 @@ class FraudDetectionSystem:
         results = self.initial_model.train(X_train, y_train, X_val, y_val)
 
         # sacuvaj metrike inicijalnog modela
-        self.metrics_tracker.add_initial_metrics(results, 'initial_rf')
+        self.metrics_tracker.add_initial_metrics(results)
 
         self.is_trained = True
         print("\n✓ Inicijalni model uspešno istreniran!")
@@ -180,7 +180,9 @@ class FraudDetectionSystem:
         feature_cols = [col for col in self.streaming_data.columns
                         if col not in ['Class', 'Time']]
 
-        batch_results = []
+        all_predictions = []
+        all_actuals = []
+        all_probabilities = []
         batch_num = 0
 
         # batch grupisanje umesto na jednom primeru
@@ -202,7 +204,6 @@ class FraudDetectionSystem:
                 y_pred_proba_dict = self.online_model.predict_proba_one(x_dict)
                 y_pred_proba = y_pred_proba_dict.get(True, 0)
 
-                # cuva se za batch metrike
                 batch_predictions.append(y_pred)
                 batch_actuals.append(y_true)
                 batch_probabilities.append(y_pred_proba)
@@ -210,22 +211,31 @@ class FraudDetectionSystem:
                 # model uci na tek prediktovanom
                 self.online_model.learn_one(x_dict, y_true)
 
-            batch_metrics = self.metrics_tracker.calculate_batch_metrics(
-                batch_predictions,
-                batch_actuals,
-                batch_probabilities,
-                batch_num
-            )
+            # akumuliraj za finalne metrike
+            all_predictions.extend(batch_predictions)
+            all_actuals.extend(batch_actuals)
+            all_probabilities.extend(batch_probabilities)
 
-            batch_results.append(batch_metrics)
+            # ispis po batchu - samo za pracenje toka, ne cuva se
+            batch_tp = sum(1 for p, a in zip(batch_predictions, batch_actuals) if p and a)
+            batch_fp = sum(1 for p, a in zip(batch_predictions, batch_actuals) if p and not a)
+            batch_fn = sum(1 for p, a in zip(batch_predictions, batch_actuals) if not p and a)
+            batch_tn = sum(1 for p, a in zip(batch_predictions, batch_actuals) if not p and not a)
+            batch_total = len(batch_actuals)
+            batch_fraud = sum(batch_actuals)
+
+            batch_acc = (batch_tp + batch_tn) / batch_total if batch_total > 0 else 0
+            batch_prec = batch_tp / (batch_tp + batch_fp) if (batch_tp + batch_fp) > 0 else 0
+            batch_rec = batch_tp / (batch_tp + batch_fn) if (batch_tp + batch_fn) > 0 else 0
+            batch_f1 = 2 * (batch_prec * batch_rec) / (batch_prec + batch_rec) if (batch_prec + batch_rec) > 0 else 0
 
             print(f"Batch {batch_num:3d} | "
-                  f"Acc: {batch_metrics['accuracy']:.4f} | "
-                  f"Prec: {batch_metrics['precision']:.4f} | "
-                  f"Rec: {batch_metrics['recall']:.4f} | "
-                  f"F1: {batch_metrics['f1']:.4f} | "
-                  f"Frauds: {batch_metrics['fraud_count']:2d}/{batch_metrics['total_transactions']:4d} | "
-                  f"Detected: {batch_metrics['detected_frauds']:2d}")
+                  f"Acc: {batch_acc:.4f} | "
+                  f"Prec: {batch_prec:.4f} | "
+                  f"Rec: {batch_rec:.4f} | "
+                  f"F1: {batch_f1:.4f} | "
+                  f"Frauds: {batch_fraud:2d}/{batch_total:4d} | "
+                  f"Detected: {batch_tp:2d}")
 
             # delay za real time simulaciju
             if delay > 0:
@@ -235,23 +245,27 @@ class FraudDetectionSystem:
         print("  STREAMING ZAVRŠEN")
         print("=" * 70)
 
-        summary = self.metrics_tracker.get_metrics_summary()
-        if summary:
-            print(f"\n📊 UKUPNO PROCESOVANO:")
-            print(f"  Transakcija: {summary['totals']['transactions_processed']:,}")
-            print(f"  Prevara: {summary['totals']['frauds_encountered']:,}")
-            print(f"  Detektovano: {summary['totals']['frauds_detected']:,}")
-            print(f"  Propušteno: {summary['totals']['frauds_missed']:,}")
-            print(f"  Detection Rate: {summary['totals']['overall_detection_rate'] * 100:.2f}%")
+        # finalne metrike nad celim streaming skupom
+        final_metrics = self.metrics_tracker.calculate_final_metrics(
+            all_predictions,
+            all_actuals,
+            all_probabilities
+        )
 
-            print(f"\n📈 PROSEČNE METRIKE:")
-            if summary['averages']:
-                print(f"  Accuracy: {summary['averages']['avg_accuracy'] * 100:.2f}%")
-                print(f"  Precision: {summary['averages']['avg_precision'] * 100:.2f}%")
-                print(f"  Recall: {summary['averages']['avg_recall'] * 100:.2f}%")
-                print(f"  F1-Score: {summary['averages']['avg_f1'] * 100:.2f}%")
+        print(f"\n📊 UKUPNO PROCESOVANO:")
+        print(f"  Transakcija: {final_metrics['total_transactions']:,}")
+        print(f"  Prevara: {final_metrics['fraud_count']:,}")
+        print(f"  Detektovano: {final_metrics['detected_frauds']:,}")
+        print(f"  Propušteno: {final_metrics['missed_frauds']:,}")
+        print(f"  Detection Rate: {final_metrics['detection_rate'] * 100:.2f}%")
 
-        return batch_results
+        print(f"\n📈 FINALNE METRIKE:")
+        print(f"  Accuracy:  {final_metrics['accuracy'] * 100:.2f}%")
+        print(f"  Precision: {final_metrics['precision'] * 100:.2f}%")
+        print(f"  Recall:    {final_metrics['recall'] * 100:.2f}%")
+        print(f"  F1-Score:  {final_metrics['f1'] * 100:.2f}%")
+
+        return final_metrics
 
     def get_current_status(self):
         return {
@@ -293,8 +307,7 @@ class FraudDetectionSystem:
                     'use_balancing': self.config.USE_BALANCING
                 },
                 'initial_model_results': initial_results,
-                'streaming_summary': self.metrics_tracker.get_metrics_summary(),
-                'trend_analysis': self.metrics_tracker.get_trend_analysis(),
+                'streaming_results': streaming_results,
                 'system_status': self.get_current_status()
             }
 
