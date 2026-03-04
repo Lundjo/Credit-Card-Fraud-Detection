@@ -78,9 +78,8 @@ class FraudDetectionSystem:
         # uzmi random uzorke i spoji u jedinstven dataframe
         legit_sample = legit.sample(n=legit_num, random_state=self.config.RANDOM_SEED)
         fraud_sample = fraud.sample(n=fraud_num, random_state=self.config.RANDOM_SEED)
-        warmup_data = pd.concat([legit_sample, fraud_sample], ignore_index=True)
 
-        return warmup_data
+        return pd.concat([legit_sample, fraud_sample], ignore_index=True)
 
     def initialize_online_model(self, warmup_samples):
         if not self.is_trained:

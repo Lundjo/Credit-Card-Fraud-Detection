@@ -26,14 +26,7 @@ class InitialModel:
             )
 
             pipeline = ImbPipeline(steps=[('over', over), ('under', under)])
-            X_train_resampled, y_train_resampled = pipeline.fit_resample(X_train, y_train)
-
-            X_train_final = X_train_resampled
-            y_train_final = y_train_resampled
-
-        else:
-            X_train_final = X_train
-            y_train_final = y_train
+            X_train, y_train = pipeline.fit_resample(X_train, y_train)
 
         self.model = RandomForestClassifier(
             n_estimators=self.config.RF_N_ESTIMATORS,
@@ -45,7 +38,7 @@ class InitialModel:
             n_jobs=self.config.RF_N_JOBS
         )
 
-        self.model.fit(X_train_final, y_train_final)
+        self.model.fit(X_train, y_train)
 
         y_pred = self.model.predict(X_val)
         y_pred_proba = self.model.predict_proba(X_val)[:, 1]
