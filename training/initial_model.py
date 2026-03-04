@@ -11,7 +11,7 @@ class InitialModel:
         self.config = config
         self.model = None
 
-    def train(self, X_train, y_train, X_val, y_val):
+    def train(self, X_train, y_train):
         if self.use_balancing:
             # kreiranje laznih prevara
             over = SMOTE(
@@ -39,30 +39,6 @@ class InitialModel:
         )
 
         self.model.fit(X_train, y_train)
-
-        y_pred = self.model.predict(X_val)
-        y_pred_proba = self.model.predict_proba(X_val)[:, 1]
-
-        # Confusion matrix
-        cm = confusion_matrix(y_val, y_pred)
-        tn, fp, fn, tp = cm.ravel()
-
-        # Dodatne metrike
-        accuracy = (tn + tp) / (tn + fp + fn + tp)
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-        auc = roc_auc_score(y_val, y_pred_proba)
-
-        # vrati rezultate
-        return {
-            'accuracy': accuracy,
-            'precision': precision,
-            'recall': recall,
-            'f1': f1,
-            'auc': auc,
-            'confusion_matrix': cm.tolist()
-        }
 
     def predict(self, X):
         if self.model is None:

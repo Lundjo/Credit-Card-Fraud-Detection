@@ -42,20 +42,10 @@ class FraudDetectionSystem:
         X = self.initial_data.drop(['Class', 'Time'], axis=1)
         y = self.initial_data['Class']
 
-        # train/validation split
-        X_train, X_val, y_train, y_val = train_test_split(
-            X, y,
-            test_size=0.2,
-            random_state=self.config.RANDOM_SEED,
-            stratify=y  # odrzi proporciju prevara u oba skupa
-        )
-
         # treniraj model
-        results = self.initial_model.train(X_train, y_train, X_val, y_val)
+        self.initial_model.train(X, y)
 
         self.is_trained = True
-
-        return results
 
     def create_warmup_data(self, initial_data, warmup_samples):
         legit = initial_data[initial_data['Class'] == 0]
@@ -224,7 +214,7 @@ class FraudDetectionSystem:
     def run_complete_pipeline(self, streaming_delay, warmup_samples):
         try:
             self.load_and_prepare_data()
-            initial_results = self.train_initial_model()
+            self.train_initial_model()
 
             effective_warmup = warmup_samples if self.is_trained else 0
             if not self.is_trained:
@@ -242,7 +232,6 @@ class FraudDetectionSystem:
                     'batch_size': self.config.DEFAULT_BATCH_SIZE,
                     'use_balancing': self.config.USE_BALANCING
                 },
-                'initial_model_results': initial_results,
                 'streaming_results': streaming_results,
                 'system_status': self.get_current_status()
             }
