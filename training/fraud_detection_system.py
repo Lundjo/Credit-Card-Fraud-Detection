@@ -33,7 +33,7 @@ class FraudDetectionSystem:
         return self.initial_data, self.streaming_data
 
     def train_initial_model(self):
-        print(f"\nTraining initial model...")
+        print(f"\nTraining Initial Model...")
 
         if not self.is_initialized:
             raise ValueError("System not initialized")
@@ -82,9 +82,6 @@ class FraudDetectionSystem:
         return pd.concat([legit_sample, fraud_sample], ignore_index=True)
 
     def initialize_online_model(self, warmup_samples):
-        if not self.is_trained:
-            print("Continuing without initial model")
-
         # inicijalizuj prazan ARF model
         self.online_model.initialize()
 
@@ -101,7 +98,7 @@ class FraudDetectionSystem:
             X_warmup = warmup_data[feature_cols]
             rf_labels = self.initial_model.predict(X_warmup)
 
-            print(f"\nKnowledge transfer...")
+            print(f"\nKnowledge Transfer...")
             for i, (idx, row) in enumerate(warmup_data.iterrows()):
                 x_dict = {col: float(row[col]) for col in feature_cols} # pretvara se u dict koji je ocekivani format
                 y_true = bool(row['Class'])
@@ -117,7 +114,7 @@ class FraudDetectionSystem:
 
             print(f"\nWarmup Finished...")
         else:
-            print("\n⚠️  Warm-up preskoćen (warmup_samples=0)")
+            print("\nNo Warmup Samples")
 
         return self.online_model
 
@@ -228,7 +225,12 @@ class FraudDetectionSystem:
         try:
             self.load_and_prepare_data()
             initial_results = self.train_initial_model()
-            self.initialize_online_model(warmup_samples)
+
+            effective_warmup = warmup_samples if self.is_trained else 0
+            if not self.is_trained:
+                print("Initial model not trained, skipping warmup")
+
+            self.initialize_online_model(effective_warmup)
             streaming_results = self.simulate_streaming(streaming_delay)
 
             self.metrics_tracker.save_to_file()
