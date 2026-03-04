@@ -33,8 +33,10 @@ class FraudDetectionSystem:
         return self.initial_data, self.streaming_data
 
     def train_initial_model(self):
+        print(f"\nTraining initial model...")
+
         if not self.is_initialized:
-            raise ValueError("Sistem nije inicijalizovan! Pozovi load_and_prepare_data() prvo.")
+            raise ValueError("System not initialized")
 
         # pripremi podatke za trening
         X = self.initial_data.drop(['Class', 'Time'], axis=1)
@@ -82,7 +84,7 @@ class FraudDetectionSystem:
 
     def initialize_online_model(self, warmup_samples):
         if not self.is_trained:
-            print("⚠️  Inicijalni model nije treniran, ali nastavljamo sa online modelom...")
+            print("Continuing without initial model")
 
         # inicijalizuj prazan ARF model
         self.online_model.initialize()
@@ -100,7 +102,7 @@ class FraudDetectionSystem:
             X_warmup = warmup_data[feature_cols]
             rf_labels = self.initial_model.predict(X_warmup)
 
-            print(f"\nUčenje u toku...")
+            print(f"\nKnowledge transfer...")
             for i, (idx, row) in enumerate(warmup_data.iterrows()):
                 x_dict = {col: float(row[col]) for col in feature_cols} # pretvara se u dict koji je ocekivani format
                 y_true = bool(row['Class'])
@@ -114,10 +116,7 @@ class FraudDetectionSystem:
                 else:
                     legit_count += 1
 
-            print(f"\n\n✓ Warm-up uspešno završen!")
-            print(f"  Ukupno naučeno: {len(warmup_data):,} primera")
-            print(f"  - Legitimne transakcije: {legit_count:,}")
-            print(f"  - Prevare: {fraud_count:,}")
+            print(f"\nWarmup Finished...")
         else:
             print("\n⚠️  Warm-up preskoćen (warmup_samples=0)")
 
@@ -250,5 +249,5 @@ class FraudDetectionSystem:
             return report
 
         except Exception as e:
-            print(f"\n❌ GREŠKA: {str(e)}")
+            print(f"\nError: {str(e)}")
             raise

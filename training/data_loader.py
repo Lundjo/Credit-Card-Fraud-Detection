@@ -27,7 +27,7 @@ class DataLoader:
 
     def split_data(self, initial_split):
         if self.data is None:
-            raise ValueError("Podaci nisu učitani! Pozovi prvo load_data()")
+            raise ValueError("Data not loaded")
 
         split_idx = int(len(self.data) * initial_split)
 

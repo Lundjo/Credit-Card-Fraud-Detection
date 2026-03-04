@@ -73,10 +73,10 @@ class InitialModel:
 
     def predict(self, X):
         if self.model is None:
-            raise ValueError("Model nije istreniran!")
+            raise ValueError("Model not trained")
         return self.model.predict(X)
 
     def predict_proba(self, X):
         if self.model is None:
-            raise ValueError("Model nije istreniran!")
+            raise ValueError("Model not trained")
         return self.model.predict_proba(X)
