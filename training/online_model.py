@@ -27,7 +27,7 @@ class OnlineModel:
     # metoda za online ucenje
     def learn_one(self, x_dict, y_true):  # x_dict zato sto ih u tom formatu ocekuje online forest
         if self.model is None:
-            raise ValueError("Model nije inicijalizovan! Pozovi initialize()")
+            raise ValueError("Model not initialized")
 
         y_pred = self.predict_one(x_dict)
         y_pred_proba = self.predict_proba_one(x_dict).get(True, 0)  # vraca true probability ili 0 ako je prazno
@@ -43,7 +43,7 @@ class OnlineModel:
     # predvidjanje i zbog poboljsanja sume
     def predict_one(self, x_dict):
         if self.model is None:
-            raise ValueError("Model nije inicijalizovan!")
+            raise ValueError("Model not initialized")
 
         proba = self.model.predict_proba_one(x_dict)
 
@@ -52,6 +52,6 @@ class OnlineModel:
     # verovatnoca tacnosti
     def predict_proba_one(self, x_dict):
         if self.model is None:
-            raise ValueError("Model nije inicijalizovan!")
+            raise ValueError("Model not initialized")
 
         return self.model.predict_proba_one(x_dict)

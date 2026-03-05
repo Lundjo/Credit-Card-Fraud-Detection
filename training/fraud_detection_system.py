@@ -1,5 +1,4 @@
 import time
-from sklearn.model_selection import train_test_split
 from config import Config
 from data_loader import DataLoader
 from initial_model import InitialModel
@@ -110,17 +109,16 @@ class FraudDetectionSystem:
 
     def simulate_streaming(self, delay):
         if not self.is_initialized:
-            raise ValueError("Sistem nije inicijalizovan!")
+            raise ValueError("System not initialized")
 
         if self.online_model.model is None:
-            raise ValueError("Online model nije inicijalizovan!")
+            raise ValueError("Online model not initialized")
 
         batch_size = self.config.DEFAULT_BATCH_SIZE
 
-        print(f"📦 Batch veličina: {batch_size}")
-        print(f"🔄 Ukupno batch-eva: {len(self.streaming_data) // batch_size}")
-        print(f"⏱️  Delay: {delay}s")
-        print("=" * 70 + "\n")
+        print(f"\nBatch Size: {batch_size}")
+        print(f"Number of batches: {len(self.streaming_data) // batch_size}")
+        print(f"Delay: {delay}s\n")
 
         feature_cols = [col for col in self.streaming_data.columns
                         if col not in ['Class', 'Time']]
@@ -186,18 +184,14 @@ class FraudDetectionSystem:
             if delay > 0:
                 time.sleep(delay)
 
-        print("\n" + "=" * 70)
-        print("  STREAMING ZAVRŠEN")
-        print("=" * 70)
-
         # finalne metrike nad celim streaming skupom
-        final_metrics = self.metrics_tracker.calculate_final_metrics(
+        detected_frauds, detection_rate, fraud_count = self.metrics_tracker.calculate_final_metrics(
             all_predictions,
             all_actuals,
             all_probabilities
         )
 
-        return final_metrics
+        return detected_frauds, detection_rate, fraud_count
 
     def get_current_status(self):
         return {
@@ -221,22 +215,11 @@ class FraudDetectionSystem:
                 print("Initial model not trained, skipping warmup")
 
             self.initialize_online_model(effective_warmup)
-            streaming_results = self.simulate_streaming(streaming_delay)
+            detected_frauds, detection_rate, fraud_count = self.simulate_streaming(streaming_delay)
 
             self.metrics_tracker.save_to_file()
 
-            report = {
-                'success': True,
-                'configuration': {
-                    'warmup_samples': warmup_samples,
-                    'batch_size': self.config.DEFAULT_BATCH_SIZE,
-                    'use_balancing': self.config.USE_BALANCING
-                },
-                'streaming_results': streaming_results,
-                'system_status': self.get_current_status()
-            }
-
-            return report
+            return detected_frauds, detection_rate, fraud_count
 
         except Exception as e:
             print(f"\nError: {str(e)}")

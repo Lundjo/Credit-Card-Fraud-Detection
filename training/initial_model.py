@@ -1,5 +1,4 @@
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.pipeline import Pipeline as ImbPipeline
@@ -42,5 +41,5 @@ class InitialModel:
 
     def predict(self, X):
         if self.model is None:
-            raise ValueError("Model not trained")
+            raise ValueError("Model not initialized")
         return self.model.predict(X)

@@ -62,7 +62,7 @@ def custom():
             print("Invalid selection")
             continue
 
-        # Opcija za promjenu parametra
+        # opcija za promenu parametra
         if 1 <= choice <= len(params):
             param = params[choice - 1]
             current_value = getattr(new_config, param)
@@ -124,12 +124,11 @@ if __name__ == '__main__':
             custom_config
         )
 
-        report = system.run_complete_pipeline(
+        detected_frauds, detection_rate, fraud_count = system.run_complete_pipeline(
             0,  # ako treba za simulaciju cekanja na sledecu transakciju
             2000
         )
 
-        if report['streaming_results']:
-            sr = report['streaming_results']
-            print(f"\nUkupno detektovano prevara: {sr['detected_frauds']}/{sr['fraud_count']}")
-            print(f"Overall Detection Rate: {sr['detection_rate'] * 100:.2f}%")
+        if detected_frauds and detection_rate and fraud_count:
+            print(f"\nFrauds Detected: {detected_frauds}/{fraud_count}")
+            print(f"Overall Detection Rate: {detection_rate * 100:.2f}%")
