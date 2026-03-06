@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, roc_auc_score
 from pathlib import Path
 
 
@@ -35,11 +35,8 @@ class MetricsTracker:
         # false positive rate
         fpr = fp / (fp + tn) if (fp + tn) > 0 else 0
 
-        # aproksimacija auc-a preko razlike prosecnih verovatnoca
-        fraud_probs = [p for p, a in zip(probabilities, actuals) if a]
-        legit_probs = [p for p, a in zip(probabilities, actuals) if not a]
-
-        approx_auc = abs(np.mean(fraud_probs) - np.mean(legit_probs)) if (fraud_probs and legit_probs) else 0
+        # vrednost ispod roc krive, kolika je verovatnoca da ce dodeliti pravoj prevari tacnost
+        auc = roc_auc_score(y_true, probabilities) if len(set(actuals)) > 1 else 0
 
         metrics = {
             'timestamp': datetime.now().isoformat(),
@@ -48,8 +45,7 @@ class MetricsTracker:
             'recall': float(recall),
             'f1': float(f1),
             'fpr': float(fpr),
-            'auc': float(approx_auc),
-            'confusion_matrix': cm.tolist(),
+            'auc': float(auc),
             'true_negatives': int(tn),
             'false_positives': int(fp),
             'false_negatives': int(fn),
