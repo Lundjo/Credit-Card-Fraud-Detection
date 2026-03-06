@@ -124,11 +124,11 @@ if __name__ == '__main__':
             custom_config
         )
 
-        detected_frauds, detection_rate, fraud_count = system.run_complete_pipeline(
+        metrics = system.run_complete_pipeline(
             0,  # ako treba za simulaciju cekanja na sledecu transakciju
             2000
         )
 
-        if detected_frauds and detection_rate and fraud_count:
-            print(f"\nFrauds Detected: {detected_frauds}/{fraud_count}")
-            print(f"Overall Detection Rate: {detection_rate * 100:.2f}%")
+        if metrics:
+            print(f"\nFrauds Detected: {metrics['detected_frauds']}/{metrics['fraud_count']}")
+            print(f"Overall Detection Rate: {metrics['detection_rate'] * 100:.2f}%")

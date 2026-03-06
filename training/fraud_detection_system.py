@@ -52,13 +52,12 @@ class FraudDetectionSystem:
 
         rows = len(initial_data)
 
-        # ako ima malo legitimnih uzmi sve ili polovinu od ukupno, u suprotnom proporcionalan udeo da ostane
+        # ako ima malo uzmi sve, u suprotnom proporcionalan udeo da ostane
         if len(legit) < warmup_samples:
             legit_num = min(len(legit), warmup_samples // 2)
         else:
             legit_num = warmup_samples * len(legit) // rows
 
-        # isti nacin uzimanja kao za legitimne
         if len(fraud) < warmup_samples:
             fraud_num = min(len(fraud), warmup_samples // 2)
         else:
@@ -185,13 +184,13 @@ class FraudDetectionSystem:
                 time.sleep(delay)
 
         # finalne metrike nad celim streaming skupom
-        detected_frauds, detection_rate, fraud_count = self.metrics_tracker.calculate_final_metrics(
+        metrics = self.metrics_tracker.calculate_final_metrics(
             all_predictions,
             all_actuals,
             all_probabilities
         )
 
-        return detected_frauds, detection_rate, fraud_count
+        return metrics
 
     def get_current_status(self):
         return {
@@ -215,11 +214,11 @@ class FraudDetectionSystem:
                 print("Initial model not trained, skipping warmup")
 
             self.initialize_online_model(effective_warmup)
-            detected_frauds, detection_rate, fraud_count = self.simulate_streaming(streaming_delay)
+            metrics = self.simulate_streaming(streaming_delay)
 
             self.metrics_tracker.save_to_file()
 
-            return detected_frauds, detection_rate, fraud_count
+            return metrics
 
         except Exception as e:
             print(f"\nError: {str(e)}")

@@ -65,7 +65,7 @@ class MetricsTracker:
 
         self.metrics_history.append(metrics)
 
-        return tp, recall, sum(actuals)
+        return metrics
 
     def save_to_file(self):
         data = {
