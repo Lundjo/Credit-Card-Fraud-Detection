@@ -20,8 +20,8 @@ class DataLoader:
                 .reset_index(drop=True) # resetuje indexe zbog brze obrade
             )
 
-            # shuffle podataka
-            self.data = self.data.sample(frac=1, random_state=self.random_seed).reset_index(drop=True)
+            # redjanje podataka hronoloski
+            self.data = self.data.sort_values('Time').reset_index(drop=True)
 
         return self.data
 
