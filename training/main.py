@@ -6,13 +6,13 @@ import sys
 def print_menu():
     print("\nTest Selection")
     print("1. Default")
-    print("2. Balanced")
+    print("2. Full")
     print("3. Fast")
     print("4. Custom")
     print("5. Exit")
 
 
-def balanced(config):
+def full(config):
     config.SAMPLE_FRACTION = 1.0
     config.USE_BALANCING = True
     config.SMOTE_SAMPLING_STRATEGY = 0.4
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         custom_config = Config()
 
         if choice == '2':
-            custom_config = balanced(custom_config)
+            custom_config = full(custom_config)
         elif choice == '3':
             custom_config = fast(custom_config)
         elif choice == '4':
