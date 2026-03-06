@@ -29,12 +29,6 @@ class OnlineModel:
         if self.model is None:
             raise ValueError("Model not initialized")
 
-        self.accuracy.update(y_true, y_pred)
-        self.precision.update(y_true, y_pred)
-        self.recall.update(y_true, y_pred)
-        self.f1.update(y_true, y_pred)
-        self.auc.update(y_true, y_pred_proba)
-
         self.model.learn_one(x_dict, y_true)
 
     # predvidjanje i zbog poboljsanja sume
