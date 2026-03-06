@@ -151,7 +151,7 @@ class FraudDetectionSystem:
                 batch_probabilities.append(y_pred_proba)
 
                 # model uci na tek prediktovanom
-                self.online_model.learn_one(x_dict, y_true)
+                self.online_model.learn_one(x_dict, y_true, y_pred, y_pred_proba)
 
             # akumuliraj za finalne metrike
             all_predictions.extend(batch_predictions)

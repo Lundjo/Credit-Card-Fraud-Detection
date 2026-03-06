@@ -25,12 +25,9 @@ class OnlineModel:
         return self.model
 
     # metoda za online ucenje
-    def learn_one(self, x_dict, y_true):  # x_dict zato sto ih u tom formatu ocekuje online forest
+    def learn_one(self, x_dict, y_true, y_pred, y_pred_proba):  # x_dict zato sto ih u tom formatu ocekuje online forest
         if self.model is None:
             raise ValueError("Model not initialized")
-
-        y_pred = self.predict_one(x_dict)
-        y_pred_proba = self.predict_proba_one(x_dict).get(True, 0)  # vraca true probability ili 0 ako je prazno
 
         self.accuracy.update(y_true, y_pred)
         self.precision.update(y_true, y_pred)
