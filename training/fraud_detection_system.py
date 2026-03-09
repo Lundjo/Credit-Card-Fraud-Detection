@@ -192,18 +192,6 @@ class FraudDetectionSystem:
 
         return metrics
 
-    def get_current_status(self):
-        return {
-            'initialized': self.is_initialized,
-            'trained': self.is_trained,
-            'current_batch': self.metrics_tracker.current_batch,
-            'config': {
-                'sample_fraction': self.config.SAMPLE_FRACTION,
-                'use_balancing': self.config.USE_BALANCING,
-                'batch_size': self.config.DEFAULT_BATCH_SIZE
-            }
-        }
-
     def run_complete_pipeline(self, streaming_delay, warmup_samples):
         try:
             self.load_and_prepare_data()
