@@ -9,8 +9,9 @@ import pandas as pd
 
 
 class FraudDetectionSystem:
-    def __init__(self, config=None):
+    def __init__(self, config=None, run_name='default'):
         self.config = config or Config()
+        self.run_name = run_name
 
         self.data_path = Path(__file__).parent.parent / 'data' / 'creditcard.csv'
         self.initial_data = None
@@ -158,26 +159,17 @@ class FraudDetectionSystem:
             all_actuals.extend(batch_actuals)
             all_probabilities.extend(batch_probabilities)
 
-            # ispis po batchu - samo za pracenje toka, ne cuva se
-            batch_tp = sum(1 for p, a in zip(batch_predictions, batch_actuals) if p and a)
-            batch_fp = sum(1 for p, a in zip(batch_predictions, batch_actuals) if p and not a)
-            batch_fn = sum(1 for p, a in zip(batch_predictions, batch_actuals) if not p and a)
-            batch_tn = sum(1 for p, a in zip(batch_predictions, batch_actuals) if not p and not a)
-            batch_total = len(batch_actuals)
-            batch_fraud = sum(batch_actuals)
-
-            batch_acc = (batch_tp + batch_tn) / batch_total if batch_total > 0 else 0
-            batch_prec = batch_tp / (batch_tp + batch_fp) if (batch_tp + batch_fp) > 0 else 0
-            batch_rec = batch_tp / (batch_tp + batch_fn) if (batch_tp + batch_fn) > 0 else 0
-            batch_f1 = 2 * (batch_prec * batch_rec) / (batch_prec + batch_rec) if (batch_prec + batch_rec) > 0 else 0
+            # sacuvaj batch metrike u tracker
+            self.metrics_tracker.track_batch(batch_num, batch_predictions, batch_actuals)
+            b = self.metrics_tracker.batch_history[-1]
 
             print(f"Batch {batch_num:3d} | "
-                  f"Acc: {batch_acc:.4f} | "
-                  f"Prec: {batch_prec:.4f} | "
-                  f"Rec: {batch_rec:.4f} | "
-                  f"F1: {batch_f1:.4f} | "
-                  f"Frauds: {batch_fraud:2d}/{batch_total:4d} | "
-                  f"Detected: {batch_tp:2d}")
+                  f"Acc: {b['accuracy']:.4f} | "
+                  f"Prec: {b['precision']:.4f} | "
+                  f"Rec: {b['recall']:.4f} | "
+                  f"F1: {b['f1']:.4f} | "
+                  f"Frauds: {b['fraud_count']:2d}/{b['total']:4d} | "
+                  f"Detected: {b['detected_frauds']:2d}")
 
             # delay za real time simulaciju
             if delay > 0:
@@ -204,7 +196,7 @@ class FraudDetectionSystem:
             self.initialize_online_model(effective_warmup)
             metrics = self.simulate_streaming(streaming_delay)
 
-            self.metrics_tracker.save_to_file()
+            self.metrics_tracker.save_to_file(run_name=self.run_name, config=self.config)
 
             return metrics
 

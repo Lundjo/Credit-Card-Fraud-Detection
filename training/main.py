@@ -120,9 +120,13 @@ if __name__ == '__main__':
             else:
                 custom_config = modified_config
 
-        system = FraudDetectionSystem(
-            custom_config
-        )
+        config_names = {'1': 'default', '2': 'full', '3': 'fast'}
+        default_name = config_names.get(choice, 'custom')
+        print(f"\nRun name (Enter for '{default_name}'): ", end='')
+        run_name_input = input().strip()
+        run_name = run_name_input if run_name_input else default_name
+
+        system = FraudDetectionSystem(custom_config, run_name=run_name)
 
         metrics = system.run_complete_pipeline(
             0,  # ako treba za simulaciju cekanja na sledecu transakciju
